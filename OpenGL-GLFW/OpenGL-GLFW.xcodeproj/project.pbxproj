@@ -320,14 +320,17 @@
 		3C49322324FBA74800B0911A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(GLEW_HEADER)",
 					"$(GLFW_HEADER)",
+					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(GLEW_LIB)",
 					"$(GLFW_LIB)",
+					/usr/local/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -337,14 +340,17 @@
 		3C49322424FBA74800B0911A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = (
 					"$(GLEW_HEADER)",
 					"$(GLFW_HEADER)",
+					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(GLEW_LIB)",
 					"$(GLFW_LIB)",
+					/usr/local/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
