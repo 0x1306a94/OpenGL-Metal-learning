@@ -1,0 +1,15 @@
+//
+//  Config.xcconfig
+//  OpenGL-GLFW
+//
+//  Created by king on 2020/8/30.
+//  Copyright © 2020 0x1306a94. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+GLEW_HEADER=/usr/local/Cellar/glew/2.1.0_1/include
+GLFW_HEADER=/usr/local/Cellar/glfw/3.3.2/include
+GLEW_LIB=/usr/local/Cellar/glew/2.1.0_1/lib
+GLFW_LIB=/usr/local/Cellar/glfw/3.3.2/lib
