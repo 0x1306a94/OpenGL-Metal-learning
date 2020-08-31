@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <iostream>
+#include <math.h>
 #include <sstream>
 #include <string>
 
@@ -37,7 +38,7 @@ static std::string ParseShader(const std::string &filename) {
 static GLuint CompileShader(GLenum type, const std::string &source) {
 	GLuint id       = glCreateShader(type);
 	const char *src = source.c_str();
-	glShaderSource(id, 1, &src, nullptr);
+	glShaderSource(id, 1, &src, NULL);
 	glCompileShader(id);
 
 	GLint result;
@@ -121,10 +122,16 @@ int main(int argc, const char *argv[]) {
 
 	/* clang-format off */
     GLfloat vertices[] = {
-        -0.5f, -0.5f, 0.0f, // x, y, z
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f,
+        0.5f, 0.5f, 0.0f,   // 右上角
+		0.5f, -0.5f, 0.0f,  // 右下角
+		-0.5f, -0.5f, 0.0f, // 左下角
+		-0.5f, 0.5f, 0.0f   // 左上角
     };
+
+	GLuint indices[] = { // 注意索引从0开始!
+		0, 1, 3, // 第一个三角形
+		1, 2, 3  // 第二个三角形
+	};
 	/* clang-format on */
 
 	std::string vertexShaderPath   = "./Shader/Shader.vsh";
@@ -148,6 +155,12 @@ int main(int argc, const char *argv[]) {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	GLuint EBO;
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid *)0);
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
@@ -157,13 +170,29 @@ int main(int argc, const char *argv[]) {
 		glClearColor(0.2, 0.3, 0.3, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// 激活着色器
 		glUseProgram(shaderProgram);
+
+		// 更新uniform颜色
+		float timeValue           = glfwGetTime();
+		float redValue            = (sin(timeValue) / 2.0f) + 0.2f;
+		float greenValue          = (sin(timeValue) / 2.0f) + 0.5f;
+		float blueValue           = (sin(timeValue) / 2.0f) + 0.4f;
+		GLint vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0);
+
+		// 绘制三角形
+//		glBindVertexArray(VAO);
+//		glDrawArrays(GL_TRIANGLES, 0, 3);
+//		glBindVertexArray(0);
+
+		// 绘制矩形
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
+		// 交换缓冲并查询IO事件
 		glfwSwapBuffers(window);
-
 		glfwPollEvents();
 	}
 	glDeleteShader(shaderProgram);
