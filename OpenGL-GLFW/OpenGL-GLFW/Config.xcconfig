@@ -13,3 +13,4 @@
 //GLFW_HEADER=/usr/local/Cellar/glfw/3.3.2/include
 //GLEW_LIB=/usr/local/Cellar/glew/2.1.0_1/lib
 //GLFW_LIB=/usr/local/Cellar/glfw/3.3.2/lib
+OTHER_LDFLAGS=$(inherited) -lGLEW -lglfw
