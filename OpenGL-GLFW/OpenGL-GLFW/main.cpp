@@ -135,8 +135,8 @@ int main(int argc, const char *argv[]) {
     };
 
 	GLuint indices[] = { // 注意索引从0开始!
-		0, 2, 6, // 第一个三角形
-		2, 4, 6  // 第二个三角形
+		0, 1, 3, // 第一个三角形
+		1, 2, 3  // 第二个三角形
 	};
 	/* clang-format on */
 
@@ -155,7 +155,7 @@ int main(int argc, const char *argv[]) {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid *)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)0);
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
@@ -182,9 +182,9 @@ int main(int argc, const char *argv[]) {
 		//		glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0);
 
 		// 绘制三角形
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
+//		glBindVertexArray(VAO);
+//		glDrawArrays(GL_TRIANGLES, 0, 3);
+//		glBindVertexArray(0);
 
 		// 绘制矩形
 		glBindVertexArray(VAO);
