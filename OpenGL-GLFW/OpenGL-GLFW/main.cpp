@@ -14,7 +14,12 @@
 #include <sstream>
 #include <string>
 
+#include "Buffer.hpp"
+#include "Program.hpp"
+#include "Shader.hpp"
+
 using namespace std;
+using namespace gl;
 
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode) {
 	//如果按下ESC，把windowShouldClose设置为True，外面的循环会关闭应用
@@ -25,64 +30,6 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 
 static void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 	glViewport(0, 0, width, height);
-}
-
-static std::string ParseShader(const std::string &filename) {
-	std::ifstream in(filename);
-	std::stringstream buffer;
-	buffer << in.rdbuf();
-	std::string contents(buffer.str());
-	return contents;
-}
-
-static GLuint CompileShader(GLenum type, const std::string &source) {
-	GLuint id       = glCreateShader(type);
-	const char *src = source.c_str();
-	glShaderSource(id, 1, &src, NULL);
-	glCompileShader(id);
-
-	GLint result;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE) {
-		GLint length;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-		char *message = (char *)alloca(length * sizeof(char));
-		glGetShaderInfoLog(id, length, &length, message);
-		std::cout << "Faild to compile " << ((type == GL_VERTEX_SHADER) ? "vertex" : "fragment") << " shader!" << std::endl;
-		std::cout << message << std::endl;
-		glDeleteShader(id);
-		return 0;
-	}
-	return id;
-}
-
-static unsigned int CreateShader(const std::string &vertexShader, const std::string &fragmentShader) {
-	GLuint program = glCreateProgram();
-
-	GLuint vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-	GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-
-	GLint result;
-	glGetProgramiv(program, GL_LINK_STATUS, &result);
-	if (result == GL_FALSE) {
-		GLint length;
-		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
-		char *message = (char *)alloca(length * sizeof(char));
-		glGetProgramInfoLog(program, length, &length, message);
-		glDeleteShader(vs);
-		glDeleteShader(fs);
-		return 0;
-	}
-	glValidateProgram(program);
-
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-
-	return program;
 }
 
 int main(int argc, const char *argv[]) {
@@ -122,48 +69,11 @@ int main(int argc, const char *argv[]) {
 	glfwSetKeyCallback(window, key_callback);                           //注册回调函数
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  // glfwGetFramebufferSize doesnt work
 
-	/* clang-format off */
-    GLfloat vertices[] = {
-		// 右上角		  // 颜色
-		0.5f, 0.5f, 0.0f, 1.0, 0.0, 0.0,
-		// 右下角
-		0.5f, -0.5f, 0.0f, 0.0, 1.0, 0.0,
-		// 左下角
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-		// 左上角
-		-0.5f, 0.5f, 0.0f, 0.3, 0.5, 0.5,
-    };
+	const string shaderName = "Shader";
 
-	GLuint indices[] = { // 注意索引从0开始!
-		0, 1, 3, // 第一个三角形
-		1, 2, 3  // 第二个三角形
-	};
-	/* clang-format on */
-
-	std::string vertexShaderPath   = "./Shader/Shader.vsh";
-	std::string fragmentShaderPath = "./Shader/Shader.fsh";
-	std::string vertexShader       = ParseShader(vertexShaderPath);
-	std::string fragmentShader     = ParseShader(fragmentShaderPath);
-	GLuint shaderProgram           = CreateShader(vertexShader, fragmentShader);
-	glUseProgram(shaderProgram);
-
-	GLuint VBO, VAO, EBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	Buffer *buffer   = new Buffer();
+	Shader *shader   = new Shader(shaderName);
+	Program *program = new Program(shader, buffer);
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -171,7 +81,8 @@ int main(int argc, const char *argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// 激活着色器
-		glUseProgram(shaderProgram);
+		program->Use();
+		program->Draw();
 
 		// 更新uniform颜色
 		//		float timeValue           = glfwGetTime();
@@ -181,25 +92,13 @@ int main(int argc, const char *argv[]) {
 		//		GLint vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
 		//		glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0);
 
-		// 绘制三角形
-//		glBindVertexArray(VAO);
-//		glDrawArrays(GL_TRIANGLES, 0, 3);
-//		glBindVertexArray(0);
-
-		// 绘制矩形
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-
 		// 交换缓冲并查询IO事件
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-	glDeleteShader(shaderProgram);
+	delete buffer;
+	delete shader;
+	delete program;
 	glfwTerminate();
 	return EXIT_SUCCESS;
 }
