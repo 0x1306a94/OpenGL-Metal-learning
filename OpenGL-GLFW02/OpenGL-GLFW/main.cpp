@@ -9,6 +9,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <fstream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <math.h>
 #include <sstream>
@@ -77,12 +80,21 @@ int main(int argc, const char *argv[]) {
 	shared_ptr<Shader> shader(new Shader(shaderName));
 	shared_ptr<Program> program(new Program(shader, buffer));
 
+//	glm::mat4 trans(1.0f);
+//	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+//	trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
 	while (!glfwWindowShouldClose(window)) {
+
+		glm::mat4 trans(1.0f);
+//		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		glClearColor(0.2, 0.3, 0.3, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 		// 激活着色器
 		program->Use();
+		glUniformMatrix4fv(glGetUniformLocation(program->getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
 		program->Draw();
 		// 交换缓冲并查询IO事件
 		glfwSwapBuffers(window);

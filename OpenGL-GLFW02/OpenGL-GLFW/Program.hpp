@@ -25,6 +25,7 @@ class Program {
 
 	void Use();
 	void Draw();
+	GLuint getID() const { return this->program; }
 
   private:
 	GLuint program;
