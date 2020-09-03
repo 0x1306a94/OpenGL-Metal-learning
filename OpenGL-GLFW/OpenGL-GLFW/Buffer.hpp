@@ -17,7 +17,7 @@ class Buffer {
 	Buffer();
 	~Buffer();
 
-	void Draw();
+	void Draw() const;
 
   private:
 	GLuint VBO, VAO, EBO;

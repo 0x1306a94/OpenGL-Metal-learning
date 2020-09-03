@@ -19,7 +19,7 @@ class Buffer;
 class Program {
 
   public:
-	Program(Shader *&shader, Buffer *&buffer);
+	Program(const Shader &shader, const Buffer &buffer);
 	~Program();
 
 	void Use();
@@ -27,8 +27,8 @@ class Program {
 
   private:
 	GLuint program;
-	Shader *&shader;
-	Buffer *&buffer;
+	const Shader &shader;
+	const Buffer &buffer;
 };
 }  // namespace gl
 

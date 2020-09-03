@@ -53,7 +53,7 @@ Buffer::~Buffer() {
 	glDeleteBuffers(1, &EBO);
 }
 
-void Buffer::Draw() {
+void Buffer::Draw() const {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

@@ -22,8 +22,8 @@ class Shader {
 	Shader(const string &shaderFileName);
 	~Shader();
 
-	GLuint getVS() { return vs; };
-	GLuint getFS() { return fs; };
+	GLuint getVS() const { return vs; };
+	GLuint getFS() const { return fs; };
 
   private:
 	GLuint vs;  // 顶点
