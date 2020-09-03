@@ -11,14 +11,13 @@
 #include "Shader.hpp"
 
 namespace gl {
-Program::Program(const Shader &shader, const Buffer &buffer)
+Program::Program(std::shared_ptr<Shader> shader, std::shared_ptr<Buffer> buffer)
     : shader(shader)
     , buffer(buffer) {
-
 	program = glCreateProgram();
 
-	glAttachShader(program, shader.getVS());
-	glAttachShader(program, shader.getFS());
+	glAttachShader(program, shader->getVS());
+	glAttachShader(program, shader->getFS());
 	glLinkProgram(program);
 	glValidateProgram(program);
 
@@ -31,11 +30,12 @@ Program::Program(const Shader &shader, const Buffer &buffer)
 		glGetProgramInfoLog(program, length, &length, message);
 	}
 
-	glDeleteShader(shader.getVS());
-	glDeleteShader(shader.getFS());
+	glDeleteShader(shader->getVS());
+	glDeleteShader(shader->getFS());
 }
 
 Program::~Program() {
+	cout << this << " " << __FUNCTION__ << endl;
 	glDeleteShader(program);
 }
 
@@ -44,7 +44,7 @@ void Program::Use() {
 }
 
 void Program::Draw() {
-	buffer.Draw();
+	buffer->Draw();
 }
 }  // namespace gl
 

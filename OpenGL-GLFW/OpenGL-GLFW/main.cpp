@@ -71,9 +71,9 @@ int main(int argc, const char *argv[]) {
 
 	const string shaderName = "Shader";
 
-	Buffer buffer;
-	Shader shader(shaderName);
-	Program program(shader, buffer);
+	shared_ptr<Buffer> buffer(new Buffer());
+	shared_ptr<Shader> shader(new Shader(shaderName));
+	shared_ptr<Program> program(new Program(shader, buffer));
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -81,8 +81,8 @@ int main(int argc, const char *argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// 激活着色器
-		program.Use();
-		program.Draw();
+		program->Use();
+		program->Draw();
 
 		// 更新uniform颜色
 		//		float timeValue           = glfwGetTime();

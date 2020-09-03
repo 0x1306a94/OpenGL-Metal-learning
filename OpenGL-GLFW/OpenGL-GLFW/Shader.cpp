@@ -23,6 +23,7 @@ Shader::Shader(const string &shaderFileName) {
 }
 
 Shader::~Shader() {
+	cout << this << " " <<__FUNCTION__<< endl;
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 }

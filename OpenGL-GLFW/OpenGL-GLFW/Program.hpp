@@ -10,6 +10,7 @@
 #define Program_hpp
 
 #include <GL/glew.h>
+#include <memory>
 
 namespace gl {
 
@@ -19,7 +20,7 @@ class Buffer;
 class Program {
 
   public:
-	Program(const Shader &shader, const Buffer &buffer);
+	Program(std::shared_ptr<Shader> shader, std::shared_ptr<Buffer> buffer);
 	~Program();
 
 	void Use();
@@ -27,8 +28,8 @@ class Program {
 
   private:
 	GLuint program;
-	const Shader &shader;
-	const Buffer &buffer;
+	std::shared_ptr<Shader> shader;
+	std::shared_ptr<Buffer> buffer;
 };
 }  // namespace gl
 

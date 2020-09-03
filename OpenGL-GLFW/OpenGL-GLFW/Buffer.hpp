@@ -10,8 +10,11 @@
 #define Buffer_hpp
 
 #include <GL/glew.h>
+#include <iostream>
 
 namespace gl {
+using namespace std;
+
 class Buffer {
   public:
 	Buffer();
