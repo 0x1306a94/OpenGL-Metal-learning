@@ -16,20 +16,55 @@
 namespace gl {
 Buffer::Buffer(const string &imageName) {
 
-	/* clang-format off */
-    GLfloat vertices[] = {
-		//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
-    };
+	GLfloat vertices[] = {
+	    //     ---- 位置 ----  - 纹理坐标 -
+	    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+	    0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+	    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+	    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 
-	GLuint indices[] = { // 注意索引从0开始!
-		0, 1, 2, // 第一个三角形
-		2, 3, 0  // 第二个三角形
-	};
-	/* clang-format on */
+	    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+	    0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+	    0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+	    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+	    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+
+	    -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	    -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+	    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	    0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	    0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	    0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+	    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	    0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+	    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+	    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+	    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+
+	    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+	    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	    -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+	    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
+
+//	GLuint indices[] = {
+//	    // 注意索引从0开始!
+//	    0, 1, 2,  // 第一个三角形
+//	    2, 3, 0   // 第二个三角形
+//	};
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -38,18 +73,16 @@ Buffer::Buffer(const string &imageName) {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(6 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
 
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+//	glGenBuffers(1, &EBO);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// 加载图片纹理
 	glGenTextures(1, &texture);
@@ -79,7 +112,7 @@ Buffer::~Buffer() {
 	cout << this << " " << __FUNCTION__ << endl;
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+//	glDeleteBuffers(1, &EBO);
 	glDeleteTextures(1, &texture);
 }
 
@@ -87,8 +120,9 @@ void Buffer::Draw() const {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glBindVertexArray(VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
 
