@@ -29,8 +29,10 @@
 @property (nonatomic, strong) id<MTLRenderPipelineState> effectsPipelineState;
 @property (nonatomic, strong) id<MTLRenderPipelineState> normalPipelineState;
 @property (nonatomic, strong) id<MTLBuffer> vertices;
+@property (nonatomic, strong) id<MTLBuffer> indexBuffer;
 @property (nonatomic, strong) id<MTLBuffer> convertMatrix;
 @property (nonatomic, assign) NSInteger numVertices;
+@property (nonatomic, assign) NSInteger indicesCount;
 @property (nonatomic, assign) CGSize viewportSize;
 @property (nonatomic, strong) AssetReader *gGreenAssetReader;
 
@@ -67,7 +69,7 @@
 - (void)setup {
 
 	self.dataOutputQueue    = dispatch_queue_create("com.0x1306a94.camera.queue", DISPATCH_QUEUE_SERIAL);
-	AVCaptureDevice *device = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera] mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionFront].devices.firstObject;
+	AVCaptureDevice *device = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera] mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack].devices.firstObject;
 
 	self.session = [[AVCaptureSession alloc] init];
 	[self.session beginConfiguration];
@@ -85,7 +87,7 @@
 
 	self.dataOutput                               = [[AVCaptureVideoDataOutput alloc] init];
 	self.dataOutput.alwaysDiscardsLateVideoFrames = NO;
-	self.dataOutput.videoSettings                 = @{(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)};
+	self.dataOutput.videoSettings                 = @{(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA)};
 	[self.dataOutput setSampleBufferDelegate:self queue:self.dataOutputQueue];
 
 	if ([self.session canAddOutput:self.dataOutput]) {
@@ -94,7 +96,7 @@
 
 	self.connection                  = [self.dataOutput connectionWithMediaType:AVMediaTypeVideo];
 	self.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
-	self.connection.videoMirrored    = YES;
+	self.connection.videoMirrored    = device.position == AVCaptureDevicePositionFront ? YES : NO;
 	[self.session commitConfiguration];
 
 	self.device = MTLCreateSystemDefaultDevice();
@@ -118,10 +120,10 @@
 }
 
 - (void)setupPipelineState {
-	id<MTLLibrary> defaultLibrary    = [self.device newDefaultLibrary];
-	id<MTLFunction> vertexFunction   = [defaultLibrary newFunctionWithName:@"vertexShader"];
-	id<MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"samplingShader"];
-
+	id<MTLLibrary> defaultLibrary  = [self.device newDefaultLibrary];
+	id<MTLFunction> vertexFunction = [defaultLibrary newFunctionWithName:@"vertexShader"];
+	//	id<MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"samplingShader"];
+	id<MTLFunction> fragmentFunction                        = [defaultLibrary newFunctionWithName:@"chromaKeyBlendFragment"];
 	MTLRenderPipelineDescriptor *pipelineStateDescriptor    = [[MTLRenderPipelineDescriptor alloc] init];
 	pipelineStateDescriptor.vertexFunction                  = vertexFunction;
 	pipelineStateDescriptor.fragmentFunction                = fragmentFunction;
@@ -136,8 +138,11 @@
 
 - (void)setupVertex {
 
-	self.vertices    = [self.device newBufferWithBytes:&quadVertices length:quadVerticesLength options:MTLResourceStorageModeShared];
-	self.numVertices = 6;
+	self.vertices    = [self.device newBufferWithBytes:quadVertices length:quadVerticesLength options:MTLResourceStorageModeShared];
+	self.numVertices = 4;
+
+	self.indexBuffer  = [self.device newBufferWithBytes:indices length:indicesLegth options:MTLResourceStorageModeShared];
+	self.indicesCount = 6;
 }
 
 - (void)setupMatrix {
@@ -152,8 +157,8 @@
 
 #pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-	self.lastCameraTexture = [[Texture alloc] initWithSampleBuffer:sampleBuffer textureCache:self.textureCache];
-//	NSLog(@"captureOutput: %f", CACurrentMediaTime());
+	self.lastCameraTexture = [[Texture alloc] initWithSampleBuffer:sampleBuffer textureCache:self.textureCache separatedYUV:NO];
+	//	NSLog(@"captureOutput: %f", CACurrentMediaTime());
 }
 
 #pragma mark - MTKViewDelegate
@@ -162,7 +167,6 @@
 }
 
 - (void)drawInMTKView:(MTKView *)view {
-	//	return;
 	[self renderEffectsInMTKView:view];
 	//		[self renderNormalInMTKView:view];
 }
@@ -189,18 +193,21 @@
 		if (greenSampleBuffer == NULL) {
 			return;
 		}
-		Texture *greenTexture = [[Texture alloc] initWithSampleBuffer:greenSampleBuffer textureCache:self.textureCache];
+		Texture *greenTexture = [[Texture alloc] initWithSampleBuffer:greenSampleBuffer textureCache:self.textureCache separatedYUV:NO];
+		CFRelease(greenSampleBuffer);
 		if (greenTexture == nil) {
-			CFRelease(greenSampleBuffer);
 			return;
 		}
-		CFRelease(greenSampleBuffer);
 
 		id<MTLCommandBuffer> commandBuffer = [self.commandQueue commandBuffer];
+
+		commandBuffer.label = @"renderEffectsInMTKView";
 		{
 			renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1.0);
 
 			id<MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
+
+			renderEncoder.label = @"renderEffectsInMTKView";
 
 			[renderEncoder setViewport:(MTLViewport){0, 0, self.viewportSize.width, self.viewportSize.height, -1, 1}];
 
@@ -208,15 +215,19 @@
 
 			[renderEncoder setVertexBuffer:self.vertices offset:0 atIndex:SSVertexInputIndexVertices];
 
-			[renderEncoder setFragmentTexture:greenTexture.textureY atIndex:SSFragmentTextureIndexGreenTextureY];
-			[renderEncoder setFragmentTexture:greenTexture.textureUV atIndex:SSFragmentTextureIndexGreenTextureUV];
+			//			[renderEncoder setFragmentTexture:greenTexture.textureY atIndex:SSFragmentTextureIndexGreenTextureY];
+			//			[renderEncoder setFragmentTexture:greenTexture.textureUV atIndex:SSFragmentTextureIndexGreenTextureUV];
+			//
+			//			[renderEncoder setFragmentTexture:lastCameraTexture.textureY atIndex:SSFragmentTextureIndexNormalTextureY];
+			//			[renderEncoder setFragmentTexture:lastCameraTexture.textureUV atIndex:SSFragmentTextureIndexNormalTextureUV];
 
-			[renderEncoder setFragmentTexture:lastCameraTexture.textureY atIndex:SSFragmentTextureIndexNormalTextureY];
-			[renderEncoder setFragmentTexture:lastCameraTexture.textureUV atIndex:SSFragmentTextureIndexNormalTextureUV];
+			//			[renderEncoder setFragmentBuffer:self.convertMatrix offset:0 atIndex:SSFragmentInputIndexMatrix];
 
-			[renderEncoder setFragmentBuffer:self.convertMatrix offset:0 atIndex:SSFragmentInputIndexMatrix];
+			[renderEncoder setFragmentTexture:greenTexture.texture atIndex:SSFragmentTextureIndexGreenTextureRGBA];
+			[renderEncoder setFragmentTexture:lastCameraTexture.texture atIndex:SSFragmentTextureIndexNormalTextureRGBA];
 
-			[renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:self.numVertices];
+			//			[renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:self.numVertices];
+			[renderEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle indexCount:self.indicesCount indexType:MTLIndexTypeUInt16 indexBuffer:self.indexBuffer indexBufferOffset:0];
 
 			[renderEncoder endEncoding];
 
@@ -246,9 +257,14 @@
 		}
 
 		id<MTLCommandBuffer> commandBuffer = [self.commandQueue commandBuffer];
+
+		commandBuffer.label = @"renderNormalInMTKView";
 		{
 			renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1.0);
 			id<MTLRenderCommandEncoder> renderEncoder           = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
+
+			renderEncoder.label = @"renderNormalInMTKView";
+
 			[renderEncoder setViewport:(MTLViewport){0, 0, self.viewportSize.width, self.viewportSize.height, -1, 1}];
 
 			[renderEncoder setRenderPipelineState:self.normalPipelineState];
@@ -260,7 +276,9 @@
 
 			[renderEncoder setFragmentBuffer:self.convertMatrix offset:0 atIndex:SSFragmentInputIndexMatrix];
 
-			[renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:self.numVertices];
+			//			[renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:self.numVertices];
+
+			[renderEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle indexCount:self.indicesCount indexType:MTLIndexTypeUInt16 indexBuffer:self.indexBuffer indexBufferOffset:0];
 
 			[renderEncoder endEncoding];
 

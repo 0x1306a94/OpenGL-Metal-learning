@@ -14,10 +14,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Texture : NSObject
+@property (nonatomic, strong, readonly) id<MTLTexture> texture;
 @property (nonatomic, strong, readonly) id<MTLTexture> textureY;
 @property (nonatomic, strong, readonly) id<MTLTexture> textureUV;
 
-- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)sampleBuffer textureCache:(CVMetalTextureCacheRef)textureCache;
+- (instancetype)initWithSampleBuffer:(CMSampleBufferRef)sampleBuffer textureCache:(CVMetalTextureCacheRef)textureCache separatedYUV:(BOOL)separatedYUV;
 @end
 
 NS_ASSUME_NONNULL_END

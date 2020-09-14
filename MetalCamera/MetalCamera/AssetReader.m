@@ -56,7 +56,7 @@
 	}
 
 	NSDictionary<NSString *, NSNumber *> *outputSettings = @{
-		(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
+		(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA),
 	};
 	self.output                        = [[AVAssetReaderTrackOutput alloc] initWithTrack:track outputSettings:outputSettings];
 	self.output.alwaysCopiesSampleData = NO;

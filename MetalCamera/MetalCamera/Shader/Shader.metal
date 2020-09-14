@@ -69,14 +69,40 @@ samplingShader(RasterizerData input [[stage_in]], // stage_in表示这个数据�
     return float4(mix(normalVideoRGB, greenVideoRGB, blendValue), 1.0); // blendValue=0，表示接近绿色，取normalColor；
 }
 
+// GPUImage3 https://github.com/BradLarson/GPUImage3/blob/master/framework/Source/Operations/ColorBurnBlend.metal
+fragment half4
+chromaKeyBlendFragment(RasterizerData input [[stage_in]],
+			   texture2d<half> greenTexture [[ texture(SSFragmentTextureIndexGreenTextureRGBA) ]],
+				texture2d<half> normalTexture [[ texture(SSFragmentTextureIndexNormalTextureRGBA) ]]) {
+
+
+	const float thresholdSensitivity = 0.4;
+	const float smoothing = 0.1;
+
+	constexpr sampler quadSampler;
+	half4 textureColor = greenTexture.sample(quadSampler, input.textureCoordinate);
+	half4 textureColor2 = normalTexture.sample(quadSampler, input.textureCoordinate);
+
+	half maskY = 0.2989h * greenMaskColor.r + 0.5866h * greenMaskColor.g + 0.1145h * greenMaskColor.b;
+	half maskCr = 0.7132h * (greenMaskColor.r - maskY);
+	half maskCb = 0.5647h * (greenMaskColor.b - maskY);
+
+	half Y = 0.2989h * textureColor.r + 0.5866h * textureColor.g + 0.1145h * textureColor.b;
+	half Cr = 0.7132h * (textureColor.r - Y);
+	half Cb = 0.5647h * (textureColor.b - Y);
+
+	float blendValue = 1.0 - smoothstep(thresholdSensitivity, thresholdSensitivity + smoothing, distance(float2(Cr, Cb), float2(maskCr, maskCb)));
+	return half4(mix(textureColor, textureColor2, half(blendValue)));
+}
+
 fragment float4
 normalSamplingShader(RasterizerData input [[stage_in]], // stage_in表示这个数据来自光栅化。（光栅化是顶点处理之后的步骤，业务层无法修改）
-               texture2d<float> normalTextureY [[ texture(SSFragmentTextureIndexNormalTextureY) ]], // texture表明是纹理数据，SSFragmentTextureIndexNormalTextureY是索引
-               texture2d<float> normalTextureUV [[ texture(SSFragmentTextureIndexNormalTextureUV) ]], // texture表明是纹理数据，SSFragmentTextureIndexNormalTextureUV是索引
-               constant SSConvertMatrix *convertMatrix [[ buffer(SSFragmentInputIndexMatrix) ]]) //buffer表明是缓存数据，SSFragmentInputIndexMatrix是索引
+               texture2d<float> normalTextureY [[ texture(SSFragmentTextureIndexNormalTextureY) ]],
+               texture2d<float> normalTextureUV [[ texture(SSFragmentTextureIndexNormalTextureUV) ]],
+               constant SSConvertMatrix *convertMatrix [[ buffer(SSFragmentInputIndexMatrix) ]])
 {
     constexpr sampler textureSampler (mag_filter::linear,
-                                      min_filter::linear); // sampler是采样器
+                                      min_filter::linear);
 
 
 

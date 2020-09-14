@@ -30,12 +30,13 @@ typedef enum SSFragmentBufferIndex {
 } SSFragmentBufferIndex;
 
 typedef enum SSFragmentTextureIndex {
-	SSFragmentTextureIndexGreenTextureY   = 0,
-	SSFragmentTextureIndexGreenTextureUV  = 1,
-	SSFragmentTextureIndexNormalTextureY  = 2,
-	SSFragmentTextureIndexNormalTextureUV = 3,
+	SSFragmentTextureIndexGreenTextureY     = 0,
+	SSFragmentTextureIndexGreenTextureUV    = 1,
+	SSFragmentTextureIndexNormalTextureY    = 2,
+	SSFragmentTextureIndexNormalTextureUV   = 3,
+	SSFragmentTextureIndexGreenTextureRGBA  = 4,
+	SSFragmentTextureIndexNormalTextureRGBA = 5,
 } SSFragmentTextureIndex;
-
 
 #endif /* ShaderTypes_h */
 
