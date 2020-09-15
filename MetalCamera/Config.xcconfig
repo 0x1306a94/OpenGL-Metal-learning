@@ -1,0 +1,15 @@
+//
+//  Config.xcconfig
+//  MetalCamera
+//
+//  Created by king on 2020/9/15.
+//  Copyright © 2020 0x1306a94. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// 1 绿幕效果 0 无效果
+RENDER_MODE=1
+
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) RENDER_MODE=$(RENDER_MODE)

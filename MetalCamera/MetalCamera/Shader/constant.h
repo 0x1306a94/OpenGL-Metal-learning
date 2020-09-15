@@ -25,24 +25,13 @@ static vector_float3 kColorConversion601FullRangeOffset = (vector_float3){
 
 static const SSVertex quadVertices[] = {
     // 顶点坐标，分别是x、y、z、w；    纹理坐标，x、y；
-    {{1.0, -1.0, 0.0, 1.0}, {1.f, 1.f}},   // 右下角
     {{-1.0, -1.0, 0.0, 1.0}, {0.f, 1.f}},  // 左下角
+    {{1.0, -1.0, 0.0, 1.0}, {1.f, 1.f}},   // 右下角
     {{-1.0, 1.0, 0.0, 1.0}, {0.f, 0.f}},   // 左上角
     {{1.0, 1.0, 0.0, 1.0}, {1.f, 0.f}},    // 右上角
 };
 
 static const int quadVerticesLength = sizeof(quadVertices);
-
-/* clang-format off */
-static const UInt16 indices[] = {
-	// 左下
-	0, 1, 2,
-	// 右上
-	0, 2, 3,
-};
-/* clang-format on */
-
-static const int indicesLegth = sizeof(indices);
 
 #endif /* constant_h */
 

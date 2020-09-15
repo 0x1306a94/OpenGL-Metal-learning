@@ -44,6 +44,7 @@
 		3C2A1EF0250B94D50094D650 /* AssetReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetReader.m; sourceTree = "<group>"; };
 		3C2A1EF2250B98710094D650 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		3C2A1EF3250B98710094D650 /* Texture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Texture.m; sourceTree = "<group>"; };
+		3CAA958525107C1300BEF2F4 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +61,7 @@
 		3C2A1EC0250B94620094D650 = {
 			isa = PBXGroup;
 			children = (
+				3CAA958525107C1300BEF2F4 /* Config.xcconfig */,
 				3C2A1ECB250B94630094D650 /* MetalCamera */,
 				3C2A1ECA250B94630094D650 /* Products */,
 			);
@@ -215,6 +217,7 @@
 /* Begin XCBuildConfiguration section */
 		3C2A1EE0250B94640094D650 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3CAA958525107C1300BEF2F4 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -273,6 +276,7 @@
 		};
 		3C2A1EE1250B94640094D650 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3CAA958525107C1300BEF2F4 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

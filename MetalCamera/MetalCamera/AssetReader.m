@@ -54,10 +54,15 @@
 		[self.lock unlock];
 		return;
 	}
-
+#if RENDER_MODE == 1
 	NSDictionary<NSString *, NSNumber *> *outputSettings = @{
 		(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA),
 	};
+#else
+	NSDictionary<NSString *, NSNumber *> *outputSettings = @{
+		(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange),
+	};
+#endif
 	self.output                        = [[AVAssetReaderTrackOutput alloc] initWithTrack:track outputSettings:outputSettings];
 	self.output.alwaysCopiesSampleData = NO;
 	[self.reader addOutput:self.output];
