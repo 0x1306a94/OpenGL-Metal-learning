@@ -55,6 +55,28 @@
 	[self setup];
 }
 
+- (void)viewDidLayoutSubviews {
+	[super viewDidLayoutSubviews];
+	CGFloat scale     = UIScreen.mainScreen.scale;
+	CGSize size       = self.view.bounds.size;
+	self.viewportSize = CGSizeApplyAffineTransform(size, CGAffineTransformMakeScale(scale, scale));
+	BOOL resume = NO;
+	if (self.session.isRunning) {
+		[self.session stopRunning];
+		resume = YES;
+	}
+	[self.session beginConfiguration];
+	if (size.height > size.width) {
+		self.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
+	} else {
+		self.connection.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+	}
+	[self.session commitConfiguration];
+	if (resume) {
+		[self.session startRunning];
+	}
+}
+
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	self.viewportSize = self.mtkView.drawableSize;
@@ -123,6 +145,13 @@
 	self.mtkView.preferredFramesPerSecond = 0;
 
 	[self.view addSubview:self.mtkView];
+	self.mtkView.translatesAutoresizingMaskIntoConstraints = NO;
+	[NSLayoutConstraint activateConstraints:@[
+		[self.mtkView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+		[self.mtkView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+		[self.mtkView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		[self.mtkView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+	]];
 
 	NSURL *url             = [[NSBundle mainBundle] URLForResource:@"fireworks" withExtension:@"mp4"];
 	self.gGreenAssetReader = [[AssetReader alloc] initWithURL:url];

@@ -10,6 +10,6 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 // 1 绿幕效果 0 无效果
-RENDER_MODE=1
+RENDER_MODE=0
 
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) RENDER_MODE=$(RENDER_MODE)

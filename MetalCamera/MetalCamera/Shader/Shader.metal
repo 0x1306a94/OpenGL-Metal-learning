@@ -104,11 +104,29 @@ normalSamplingShader(RasterizerData input [[stage_in]], // stage_in表示这个�
     constexpr sampler textureSampler (mag_filter::linear,
                                       min_filter::linear);
 
+	float horizontal = 3;
+	float vertical = 3;
 
+	float horizontalCount = max(horizontal, 1.0);  // (2)
+	float verticalCount = max(vertical, 1.0);
+
+	float ratio = verticalCount / horizontalCount;  // (3)
+
+	float2 originSize = float2(1.0, 1.0);
+	float2 newSize = originSize;
+
+	if (ratio > 1.0) {
+		newSize.y = 1.0 / ratio;
+	} else {
+		newSize.x = ratio;
+	}
+
+	float2 offset = (originSize - newSize) / 2.0;  // (4)
+	float2 position = offset + modf(input.textureCoordinate * min(horizontalCount, verticalCount), newSize);  // (5)
 
     // 正常视频读取出来的图像，yuv颜色空间
-    float3 normalVideoYUV = float3(normalTextureY.sample(textureSampler, input.textureCoordinate).r,
-                             normalTextureUV.sample(textureSampler, input.textureCoordinate).rg);
+    float3 normalVideoYUV = float3(normalTextureY.sample(textureSampler, position).r,
+                             normalTextureUV.sample(textureSampler, position).rg);
     // yuv转成rgb
     float3 normalVideoRGB = convertMatrix->matrix * (normalVideoYUV + convertMatrix->offset);
 	return float4(normalVideoRGB, 1.0);
