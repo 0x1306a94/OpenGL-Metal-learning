@@ -83,7 +83,7 @@ int main(int argc, const char *argv[]) {
 		// 激活着色器
 		program->Use();
 		program->Draw();
-
+		program->Draw(true);
 		// 更新uniform颜色
 		//		float timeValue           = glfwGetTime();
 		//		float redValue            = (sin(timeValue) / 2.0f) + 0.2f;

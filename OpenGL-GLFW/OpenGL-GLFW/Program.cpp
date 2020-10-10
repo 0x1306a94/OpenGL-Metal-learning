@@ -43,8 +43,9 @@ void Program::Use() {
 	glUseProgram(program);
 }
 
-void Program::Draw() {
-	buffer->Draw();
+void Program::Draw(bool rotate) {
+
+	buffer->Draw(program, rotate);
 }
 }  // namespace gl
 

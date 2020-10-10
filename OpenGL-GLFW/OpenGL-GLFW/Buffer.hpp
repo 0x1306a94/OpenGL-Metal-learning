@@ -20,7 +20,7 @@ class Buffer {
 	Buffer();
 	~Buffer();
 
-	void Draw() const;
+	void Draw(GLuint programId, bool rotate = false) const;
 
   private:
 	GLuint VBO, VAO, EBO;

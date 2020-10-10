@@ -24,7 +24,7 @@ class Program {
 	~Program();
 
 	void Use();
-	void Draw();
+	void Draw(bool rotate = false);
 
   private:
 	GLuint program;
