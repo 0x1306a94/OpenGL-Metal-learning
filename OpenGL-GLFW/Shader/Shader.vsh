@@ -10,7 +10,7 @@ uniform bool transformed;
 
 void main() {
 	if (transformed) {
-		gl_Position = position * transform;
+		gl_Position = transform * position ;
 	} else {
 		gl_Position = position;
 	}

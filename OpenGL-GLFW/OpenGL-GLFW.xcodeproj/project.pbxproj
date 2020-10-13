@@ -10,6 +10,7 @@
 		3C49321F24FBA74800B0911A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C49321E24FBA74800B0911A /* main.cpp */; };
 		3C49323124FBAA6000B0911A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C49323024FBAA6000B0911A /* OpenGL.framework */; };
 		3C49323324FBAA6700B0911A /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C49323224FBAA6700B0911A /* GLUT.framework */; };
+		3C6930FD2535373200B2FF89 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C6930FC2535373200B2FF89 /* GLKit.framework */; };
 		3C9BEA5524FF81B200982A20 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BEA5324FF81B200982A20 /* Shader.cpp */; };
 		3C9BEA5B24FF85F800982A20 /* Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BEA5924FF85F800982A20 /* Program.cpp */; };
 		3C9BEA5E24FF87AF00982A20 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BEA5C24FF87AF00982A20 /* Buffer.cpp */; };
@@ -34,6 +35,7 @@
 		3C49322524FBA79200B0911A /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		3C49323024FBAA6000B0911A /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		3C49323224FBAA6700B0911A /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		3C6930FC2535373200B2FF89 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		3C9BEA5324FF81B200982A20 /* Shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		3C9BEA5424FF81B200982A20 /* Shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
 		3C9BEA5924FF85F800982A20 /* Program.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Program.cpp; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C49323324FBAA6700B0911A /* GLUT.framework in Frameworks */,
+				3C6930FD2535373200B2FF89 /* GLKit.framework in Frameworks */,
 				3C49323124FBAA6000B0911A /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +516,7 @@
 		3C49322624FBA8A200B0911A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C6930FC2535373200B2FF89 /* GLKit.framework */,
 				3C49323224FBAA6700B0911A /* GLUT.framework */,
 				3C49323024FBAA6000B0911A /* OpenGL.framework */,
 			);

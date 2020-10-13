@@ -14,8 +14,11 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
+#include <GLKit/GLKMath.h>
+
 namespace gl {
 
+#if 1
 // 右上角
 glm::vec4 topRight(-0.1f, 0.8f, 0.0f, 1.0f);
 // 右下角
@@ -24,6 +27,16 @@ glm::vec4 bottomRight(-0.1f, -0.5f, 0.0f, 1.0f);
 glm::vec4 topLeft(-0.8f, -0.5f, 0.0f, 1.0f);
 // 左上角
 glm::vec4 bottomLeft(-0.8f, 0.8f, 0.0f, 1.0f);
+#else
+// 右上角
+glm::vec4 topRight(0.5f, 0.5f, 0.0f, 1.0f);
+// 右下角
+glm::vec4 bottomRight(0.5f, -0.5f, 0.0f, 1.0f);
+// 左下角
+glm::vec4 topLeft(-0.5f, -0.5f, 0.0f, 1.0f);
+// 左上角
+glm::vec4 bottomLeft(-0.5f, 0.5f, 0.0f, 1.0f);
+#endif
 
 // 右上角
 glm::vec3 topRightColor(1.0, 0.0, 0.0);
@@ -131,17 +144,9 @@ void Buffer::Draw(GLuint programId, bool rotate) const {
 	};
 
 	if (rotate) {
-		glm::mat4 transform(1.0f);
-		transform = glm::translate(transform, glm::vec3(0.5f, 0.0f, 0.0f));
-		//		transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		//				transform = glm::translate(transform, glm::vec3(-0.5f, -0.5f, 0.0f));
-
-		data[0].updatePosition(transform * topRight);
-		data[1].updatePosition(transform * bottomRight);
-		data[2].updatePosition(transform * topLeft);
-		data[3].updatePosition(transform * bottomLeft);
-		//设置变换矩阵
-		glUniformMatrix4fv(glGetUniformLocation(programId, "transform"), 1, GL_FALSE, glm::value_ptr(transform));
+		GLKMatrix4 transform = GLKMatrix4Identity;
+		transform            = GLKMatrix4MakeZRotation(GLKMathDegreesToRadians(-270));
+		glUniformMatrix4fv(glGetUniformLocation(programId, "transform"), 1, GL_FALSE, transform.m);
 		glUniform1i(glGetUniformLocation(programId, "transformed"), true);
 	} else {
 
