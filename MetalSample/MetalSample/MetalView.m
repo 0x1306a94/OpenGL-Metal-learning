@@ -197,7 +197,7 @@ static simd_float4x4 getMetalMatrixFromGLKMatrix(GLKMatrix4 matrix) {
 
 	UInt index               = 0;
 	GLKMatrix4 transformto   = GLKMatrix4MakeTranslation(-vertexData[index].position[0], -vertexData[index].position[1], 0);
-	GLKMatrix4 rotate        = GLKMatrix4MakeZRotation(GLKMathDegreesToRadians(-90));
+	GLKMatrix4 rotate        = GLKMatrix4MakeZRotation(GLKMathDegreesToRadians(-15));
 	GLKMatrix4 transformback = GLKMatrix4MakeTranslation(vertexData[index].position[0], vertexData[index].position[1], 0);
 
 	rotate = GLKMatrix4Multiply(transformback, rotate);
@@ -206,6 +206,7 @@ static simd_float4x4 getMetalMatrixFromGLKMatrix(GLKMatrix4 matrix) {
 	_uniform = (SSUniform){
 	    false,
 	    getMetalMatrixFromGLKMatrix(rotate),
+		getMetalMatrixFromGLKMatrix(GLKMatrix4MakeTranslation(0.5,0,0)),
 	};
 }
 

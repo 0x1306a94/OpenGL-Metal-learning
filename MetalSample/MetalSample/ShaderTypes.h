@@ -18,6 +18,7 @@ typedef struct {
 typedef struct {
 	bool transformed;
 	simd_float4x4 transform;
+	simd_float4x4 transform2;
 } SSUniform;
 
 typedef enum SSVertexInputIndex {
