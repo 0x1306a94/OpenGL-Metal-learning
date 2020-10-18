@@ -33,6 +33,7 @@
 		3C69312525354EC500B2FF89 /* Shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader.metal; sourceTree = "<group>"; };
 		3C69312825354EDD00B2FF89 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		3C69312D2535532500B2FF89 /* IMG_3750.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_3750.jpeg; sourceTree = "<group>"; };
+		3CCC6A27253C24170083343F /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +71,7 @@
 				3C69310D2535482600B2FF89 /* AppDelegate.m */,
 				3C693121253548CC00B2FF89 /* MetalView.h */,
 				3C693122253548CC00B2FF89 /* MetalView.m */,
+				3CCC6A27253C24170083343F /* Util.h */,
 				3C69312525354EC500B2FF89 /* Shader.metal */,
 				3C69312825354EDD00B2FF89 /* ShaderTypes.h */,
 				3C69310F2535482600B2FF89 /* ViewController.h */,

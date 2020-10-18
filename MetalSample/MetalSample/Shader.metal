@@ -25,6 +25,7 @@ vertex_main(uint vertexID [[ vertex_id ]], // vertex_id是顶点shader每次处�
 	RasterizerData out;
 	if (uniforms.transformed) {
 		out.clipSpacePosition = uniforms.transform2 * uniforms.transform * vertexArray[vertexID].position;
+//        out.clipSpacePosition = uniforms.transform * vertexArray[vertexID].position;
 	} else {
 		out.clipSpacePosition = vertexArray[vertexID].position;
 	}
