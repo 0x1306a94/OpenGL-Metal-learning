@@ -14,6 +14,14 @@
 	[super viewDidLoad];
 
 	// Do any additional setup after loading the view.
+
+
+}
+
+- (void)viewWillAppear {
+	[super viewWillAppear];
+	[self.view.window setContentSize:NSMakeSize(360, 640)];
+	[self.view.window center];
 }
 
 - (void)viewDidAppear {
