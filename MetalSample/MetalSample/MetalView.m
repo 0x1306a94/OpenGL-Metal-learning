@@ -110,7 +110,7 @@
 
 	NSError *error = nil;
 	_pipeline      = [self.device newRenderPipelineStateWithDescriptor:pipelineDescriptor
-                                                            error:&error];
+																 error:&error];
 
 	if (!_pipeline) {
 		NSLog(@"Error occurred when creating render pipeline state: %@", error);
@@ -136,14 +136,14 @@
 	SSVertex vertexData[4] = {0};
 	for (int i = 0; i < 4; i++) {
 		vertexData[i] = (SSVertex){
-		    {vertices[(i * 4)], vertices[(i * 4) + 1], vertices[(i * 4) + 2], vertices[(i * 4) + 3]},
-		    {sourceCoordinates[(i * 2)], sourceCoordinates[(i * 2) + 1]},
+			{vertices[(i * 4)], vertices[(i * 4) + 1], vertices[(i * 4) + 2], vertices[(i * 4) + 3]},
+			{sourceCoordinates[(i * 2)], sourceCoordinates[(i * 2) + 1]},
 		};
 	}
 
 	_vertexBuffer = [self.device newBufferWithBytes:vertexData
-	                                         length:sizeof(vertexData)
-	                                        options:MTLResourceStorageModeShared];
+											 length:sizeof(vertexData)
+											options:MTLResourceStorageModeShared];
 }
 
 - (void)makeTexture {
@@ -206,19 +206,40 @@ static BOOL addTx      = YES;
 		// 正交投影矩阵
 		GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, renderSize.width, renderSize.height, 0, -1, 1);
 
+		GLKMatrix4 modelMatrix = GLKMatrix4Identity;
+
+		// 修改旋转中心
+		CGPoint controlPoint     = CGPointMake(CGRectGetMidX(self.renderRect), CGRectGetMidY(self.renderRect));
+		GLKMatrix4 transformto   = GLKMatrix4MakeTranslation(-controlPoint.x, -controlPoint.y, 0);
+		GLKMatrix4 rotateMatrix  = GLKMatrix4MakeZRotation(GLKMathDegreesToRadians(5));
+		GLKMatrix4 transformback = GLKMatrix4MakeTranslation(controlPoint.x, controlPoint.y, 0);
+
+
+		modelMatrix            = GLKMatrix4Multiply(transformto, modelMatrix);
+		modelMatrix            = GLKMatrix4Multiply(rotateMatrix, modelMatrix);
+		modelMatrix            = GLKMatrix4Multiply(transformback, modelMatrix);
+
 		SSUniform uniform = (SSUniform){
 			.projection = getMetalMatrixFromGLKMatrix(projectionMatrix),
-			.model      = getMetalMatrixFromGLKMatrix(GLKMatrix4Identity),
+			.model      = getMetalMatrixFromGLKMatrix(modelMatrix),
 		};
 
 		[commandEncoder setVertexBytes:&uniform length:sizeof(uniform) atIndex:SSVertexInputIndexUniforms];
+
+		{
+			int antiAliasing = 0;
+			float size[2] = {renderSize.width, renderSize.height};
+			[commandEncoder setFragmentBytes:&size length:sizeof(size) atIndex:0];
+			[commandEncoder setFragmentBytes:&antiAliasing length:sizeof(antiAliasing) atIndex:1];
+		}
+
 		[commandEncoder drawPrimitives:MTLPrimitiveTypeTriangleStrip vertexStart:0 vertexCount:4];
 
 		Degrees = 15;
-//		Degrees += 1;
-//		if (Degrees > 360.0) {
-//			Degrees = 0;
-//		}
+		//		Degrees += 1;
+		//		if (Degrees > 360.0) {
+		//			Degrees = 0;
+		//		}
 		if (addTx) {
 			tx += 0.001;
 		} else {
@@ -232,18 +253,6 @@ static BOOL addTx      = YES;
 			addTx = YES;
 		}
 
-
-		// 修改旋转中心
-		CGPoint controlPoint     = CGPointMake(CGRectGetMidX(self.renderRect), CGRectGetMidY(self.renderRect));
-		GLKMatrix4 transformto   = GLKMatrix4MakeTranslation(-controlPoint.x, -controlPoint.y, 0);
-		GLKMatrix4 rotateMatrix  = GLKMatrix4MakeZRotation(GLKMathDegreesToRadians(5));
-		GLKMatrix4 transformback = GLKMatrix4MakeTranslation(controlPoint.x, controlPoint.y, 0);
-
-		GLKMatrix4 modelMatrix = GLKMatrix4Identity;
-		modelMatrix            = GLKMatrix4Multiply(transformto, modelMatrix);
-		modelMatrix            = GLKMatrix4Multiply(rotateMatrix, modelMatrix);
-		modelMatrix            = GLKMatrix4Multiply(transformback, modelMatrix);
-
 		modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0, 500, 0), modelMatrix);
 
 		SSUniform uniform2 = (SSUniform){
@@ -252,6 +261,12 @@ static BOOL addTx      = YES;
 		};
 
 		[commandEncoder setVertexBytes:&uniform2 length:sizeof(uniform2) atIndex:SSVertexInputIndexUniforms];
+		{
+			int antiAliasing = 1;
+			float size[2] = {renderSize.width, renderSize.height};
+			[commandEncoder setFragmentBytes:&size length:sizeof(size) atIndex:0];
+			[commandEncoder setFragmentBytes:&antiAliasing length:sizeof(antiAliasing) atIndex:1];
+		}
 		[commandEncoder drawPrimitives:MTLPrimitiveTypeTriangleStrip vertexStart:0 vertexCount:4];
 
 		[commandEncoder endEncoding];
