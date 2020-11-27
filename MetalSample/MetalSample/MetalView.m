@@ -47,7 +47,7 @@
 
 - (void)commonInit {
 	_frameDuration = 1.0 / 30.0;
-	_clearColor    = MTLClearColorMake(0.2, 0.3, 0.4, 1);
+	_clearColor    = MTLClearColorMake(1, 1, 1, 1);
 
 	[self makeBackingLayer];
 	[self makeBuffers];
@@ -125,10 +125,12 @@
 	if (CGSizeEqualToSize(drawableSize, CGSizeZero)) {
 		return;
 	}
-	CGRect renderRect = CGRectMake(200, 100, 300, 400);
+	CGRect renderRect = CGRectMake(200, 50, 200, 200);
+	renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeScale(NSScreen.mainScreen.backingScaleFactor, NSScreen.mainScreen.backingScaleFactor));
+	renderRect.origin.x = (drawableSize.width - renderRect.size.width) * 0.5;
 	self.renderRect = renderRect;
 	float vertices[16], sourceCoordinates[8];
-	genMTLVertices(renderRect, drawableSize, vertices, YES);
+	genMTLVertices(renderRect, drawableSize, vertices, YES, NO);
 
 	replaceArrayElements(sourceCoordinates, (void *)kMTLTextureCoordinatesIdentity, 8);
 	SSVertex vertexData[4] = {0};
@@ -142,21 +144,6 @@
 	_vertexBuffer = [self.device newBufferWithBytes:vertexData
 	                                         length:sizeof(vertexData)
 	                                        options:MTLResourceStorageModeShared];
-
-	// 已绘制矩形中心点为旋转中心
-	CGPoint controlPoint     = dc_to_ndc(CGPointMake(CGRectGetMidX(renderRect), CGRectGetMidY(renderRect)), drawableSize);
-	GLKMatrix4 transformto   = GLKMatrix4MakeTranslation(-controlPoint.x, -controlPoint.y, 0);
-	GLKMatrix4 rotate        = GLKMatrix4MakeZRotation(GLKMathDegreesToRadians(-15));
-	GLKMatrix4 transformback = GLKMatrix4MakeTranslation(controlPoint.x, controlPoint.y, 0);
-
-	rotate = GLKMatrix4Multiply(transformback, rotate);
-	rotate = GLKMatrix4Multiply(rotate, transformto);
-
-	_uniform = (SSUniform){
-	    false,
-	    getMetalMatrixFromGLKMatrix(rotate),
-	    getMetalMatrixFromGLKMatrix(GLKMatrix4MakeTranslation(0, -0.85, 0)),
-	};
 }
 
 - (void)makeTexture {
@@ -197,6 +184,8 @@ static BOOL addTx      = YES;
 	id<CAMetalDrawable> drawable      = [self.metalLayer nextDrawable];
 	id<MTLTexture> framebufferTexture = drawable.texture;
 
+	CGSize renderSize = self.metalLayer.drawableSize;
+
 	if (drawable) {
 		MTLRenderPassDescriptor *passDescriptor        = [MTLRenderPassDescriptor renderPassDescriptor];
 		passDescriptor.colorAttachments[0].texture     = framebufferTexture;
@@ -213,11 +202,18 @@ static BOOL addTx      = YES;
 
 		[commandEncoder setFragmentTexture:self.texture atIndex:SSFragmentTextureIndexOne];
 
-		_uniform.transformed = false;
-		[commandEncoder setVertexBytes:&_uniform length:sizeof(_uniform) atIndex:SSVertexInputIndexUniforms];
+		// 贴图统一使用像素坐标系
+		// 正交投影矩阵
+		GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, renderSize.width, renderSize.height, 0, -1, 1);
+
+		SSUniform uniform = (SSUniform){
+			.projection = getMetalMatrixFromGLKMatrix(projectionMatrix),
+			.model      = getMetalMatrixFromGLKMatrix(GLKMatrix4Identity),
+		};
+
+		[commandEncoder setVertexBytes:&uniform length:sizeof(uniform) atIndex:SSVertexInputIndexUniforms];
 		[commandEncoder drawPrimitives:MTLPrimitiveTypeTriangleStrip vertexStart:0 vertexCount:4];
 
-		_uniform.transformed = true;
 		Degrees = 15;
 //		Degrees += 1;
 //		if (Degrees > 360.0) {
@@ -235,16 +231,27 @@ static BOOL addTx      = YES;
 			tx    = 0;
 			addTx = YES;
 		}
-		CGPoint controlPoint     = dc_to_ndc(CGPointMake(CGRectGetMidX(self.renderRect), CGRectGetMidY(self.renderRect)), self.metalLayer.drawableSize);
+
+
+		// 修改旋转中心
+		CGPoint controlPoint     = CGPointMake(CGRectGetMidX(self.renderRect), CGRectGetMidY(self.renderRect));
 		GLKMatrix4 transformto   = GLKMatrix4MakeTranslation(-controlPoint.x, -controlPoint.y, 0);
-		GLKMatrix4 rotate        = GLKMatrix4MakeZRotation(GLKMathDegreesToRadians(-Degrees));
+		GLKMatrix4 rotateMatrix  = GLKMatrix4MakeZRotation(GLKMathDegreesToRadians(5));
 		GLKMatrix4 transformback = GLKMatrix4MakeTranslation(controlPoint.x, controlPoint.y, 0);
 
-		rotate               = GLKMatrix4Multiply(transformback, rotate);
-		rotate               = GLKMatrix4Multiply(rotate, transformto);
-		_uniform.rotate      = getMetalMatrixFromGLKMatrix(rotate);
-		_uniform.translation = getMetalMatrixFromGLKMatrix(GLKMatrix4MakeTranslation(0, -0.85, 0));
-		[commandEncoder setVertexBytes:&_uniform length:sizeof(_uniform) atIndex:SSVertexInputIndexUniforms];
+		GLKMatrix4 modelMatrix = GLKMatrix4Identity;
+		modelMatrix            = GLKMatrix4Multiply(transformto, modelMatrix);
+		modelMatrix            = GLKMatrix4Multiply(rotateMatrix, modelMatrix);
+		modelMatrix            = GLKMatrix4Multiply(transformback, modelMatrix);
+
+		modelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0, 500, 0), modelMatrix);
+
+		SSUniform uniform2 = (SSUniform){
+			.projection = getMetalMatrixFromGLKMatrix(projectionMatrix),
+			.model      = getMetalMatrixFromGLKMatrix(modelMatrix),
+		};
+
+		[commandEncoder setVertexBytes:&uniform2 length:sizeof(uniform2) atIndex:SSVertexInputIndexUniforms];
 		[commandEncoder drawPrimitives:MTLPrimitiveTypeTriangleStrip vertexStart:0 vertexCount:4];
 
 		[commandEncoder endEncoding];

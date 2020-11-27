@@ -23,12 +23,7 @@ vertex_main(uint vertexID [[ vertex_id ]], // vertex_id是顶点shader每次处�
 			 constant SSVertex *vertexArray [[ buffer(SSVertexInputIndexVertices) ]],
 			constant SSUniform & uniforms [[ buffer(SSVertexInputIndexUniforms) ]]) { // buffer表明是缓存数据，0是索引
 	RasterizerData out;
-	if (uniforms.transformed) {
-		out.clipSpacePosition = uniforms.translation * uniforms.rotate * vertexArray[vertexID].position;
-//        out.clipSpacePosition = uniforms.rotate * vertexArray[vertexID].position;
-	} else {
-		out.clipSpacePosition = vertexArray[vertexID].position;
-	}
+	out.clipSpacePosition = uniforms.projection * uniforms.model * vertexArray[vertexID].position;
 	out.textureCoordinate = vertexArray[vertexID].textureCoordinate;
 	return out;
 }

@@ -20,12 +20,16 @@
 
 - (void)viewWillAppear {
 	[super viewWillAppear];
-	[self.view.window setContentSize:NSMakeSize(360, 640)];
-	[self.view.window center];
+	[self.view.window setFrame:NSMakeRect(0, 0, 360, 640) display:YES];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.view.window center];
+	});
 }
 
 - (void)viewDidAppear {
 	[super viewDidAppear];
+
+	self.view.window.movableByWindowBackground = YES;
 
 	[((MetalView *)self.view) startDrawing];
 }

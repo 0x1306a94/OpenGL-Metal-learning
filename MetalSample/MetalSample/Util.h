@@ -33,40 +33,68 @@ static void replaceArrayElements(float arr0[], float arr1[], int size) {
 }
 
 //倒N形
-static void genMTLVertices(CGRect rect, CGSize containerSize, float vertices[16], BOOL reverse) {
-    if (vertices == NULL) {
-        NSLog(@"generateMTLVertices params illegal.");
-        assert(0);
-        return;
-    }
-    if (containerSize.width <= 0 || containerSize.height <= 0) {
-        NSLog(@"generateMTLVertices params containerSize illegal.");
-        assert(0);
-        return;
-    }
-    float originX, originY, width, height;
-    originX = -1 + 2 * rect.origin.x / containerSize.width;
-    originY = 1 - 2 * rect.origin.y / containerSize.height;
-    width   = 2 * rect.size.width / containerSize.width;
-    height  = 2 * rect.size.height / containerSize.height;
+static void genMTLVertices(CGRect rect, CGSize containerSize, float vertices[16], BOOL reverse, BOOL normalized) {
+	if (vertices == NULL) {
+		NSLog(@"generateMTLVertices params illegal.");
+		assert(0);
+		return;
+	}
+	if (containerSize.width <= 0 || containerSize.height <= 0) {
+		NSLog(@"generateMTLVertices params containerSize illegal.");
+		assert(0);
+		return;
+	}
+	float originX, originY, width, height;
+	if (normalized) {
+		originX = -1 + 2 * rect.origin.x / containerSize.width;
+		originY = 1 - 2 * rect.origin.y / containerSize.height;
+		width   = 2 * rect.size.width / containerSize.width;
+		height  = 2 * rect.size.height / containerSize.height;
+	} else {
+		originX = rect.origin.x;
+		originY = rect.origin.y;
+		width   = rect.size.width;
+		height  = rect.size.height;
+	}
 
-    if (reverse) {
-        float tempVertices[] = {
-            originX, originY - height, 0.0, 1.0,          //
-            originX, originY, 0.0, 1.0,                   //
-            originX + width, originY - height, 0.0, 1.0,  //
-            originX + width, originY, 0.0, 1.0            //
-        };
-        replaceArrayElements(vertices, tempVertices, 16);
-        return;
-    }
-    float tempVertices[] = {
-        originX, originY, 0.0, 1.0,                  //
-        originX, originY - height, 0.0, 1.0,         //
-        originX + width, originY, 0.0, 1.0,          //
-        originX + width, originY - height, 0.0, 1.0  //
-    };
-    replaceArrayElements(vertices, tempVertices, 16);
+	if (reverse) {
+
+		if (normalized) {
+			float tempVertices[] = {
+				originX, originY - height, 0.0, 1.0,          //
+				originX, originY, 0.0, 1.0,                   //
+				originX + width, originY - height, 0.0, 1.0,  //
+				originX + width, originY, 0.0, 1.0            //
+			};
+			replaceArrayElements(vertices, tempVertices, 16);
+			return;
+		}
+		float tempVertices[] = {
+			originX, originY + height, 0.0, 1.0,          //
+			originX, originY, 0.0, 1.0,                   //
+			originX + width, originY + height, 0.0, 1.0,  //
+			originX + width, originY, 0.0, 1.0            //
+		};
+		replaceArrayElements(vertices, tempVertices, 16);
+		return;
+	}
+	if (normalized) {
+		float tempVertices[] = {
+			originX, originY, 0.0, 1.0,                  //
+			originX, originY - height, 0.0, 1.0,         //
+			originX + width, originY, 0.0, 1.0,          //
+			originX + width, originY - height, 0.0, 1.0  //
+		};
+		replaceArrayElements(vertices, tempVertices, 16);
+		return;
+	}
+	float tempVertices[] = {
+		originX, originY, 0.0, 1.0,                  //
+		originX, originY + height, 0.0, 1.0,         //
+		originX + width, originY, 0.0, 1.0,          //
+		originX + width, originY + height, 0.0, 1.0  //
+	};
+	replaceArrayElements(vertices, tempVertices, 16);
 }
 
 static simd_float4x4 getMetalMatrixFromGLKMatrix(GLKMatrix4 matrix) {
