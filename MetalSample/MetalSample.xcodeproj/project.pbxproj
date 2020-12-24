@@ -12,7 +12,6 @@
 		3C6931132535482700B2FF89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C6931122535482700B2FF89 /* Assets.xcassets */; };
 		3C6931162535482700B2FF89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C6931142535482700B2FF89 /* Main.storyboard */; };
 		3C6931192535482700B2FF89 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C6931182535482700B2FF89 /* main.m */; };
-		3C693123253548CC00B2FF89 /* MetalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C693122253548CC00B2FF89 /* MetalView.m */; };
 		3C69312625354EC500B2FF89 /* Shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3C69312525354EC500B2FF89 /* Shader.metal */; };
 		3C69312E2535532500B2FF89 /* IMG_3750.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 3C69312D2535532500B2FF89 /* IMG_3750.jpeg */; };
 /* End PBXBuildFile section */
@@ -28,8 +27,6 @@
 		3C6931172535482700B2FF89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C6931182535482700B2FF89 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3C69311A2535482700B2FF89 /* MetalSample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetalSample.entitlements; sourceTree = "<group>"; };
-		3C693121253548CC00B2FF89 /* MetalView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalView.h; sourceTree = "<group>"; };
-		3C693122253548CC00B2FF89 /* MetalView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MetalView.m; sourceTree = "<group>"; };
 		3C69312525354EC500B2FF89 /* Shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader.metal; sourceTree = "<group>"; };
 		3C69312825354EDD00B2FF89 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		3C69312D2535532500B2FF89 /* IMG_3750.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_3750.jpeg; sourceTree = "<group>"; };
@@ -69,8 +66,6 @@
 				3C69312D2535532500B2FF89 /* IMG_3750.jpeg */,
 				3C69310C2535482600B2FF89 /* AppDelegate.h */,
 				3C69310D2535482600B2FF89 /* AppDelegate.m */,
-				3C693121253548CC00B2FF89 /* MetalView.h */,
-				3C693122253548CC00B2FF89 /* MetalView.m */,
 				3CCC6A27253C24170083343F /* Util.h */,
 				3C69312525354EC500B2FF89 /* Shader.metal */,
 				3C69312825354EDD00B2FF89 /* ShaderTypes.h */,
@@ -111,7 +106,7 @@
 		3C6931012535482600B2FF89 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1230;
 				TargetAttributes = {
 					3C6931082535482600B2FF89 = {
 						CreatedOnToolsVersion = 12.0;
@@ -154,7 +149,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C693123253548CC00B2FF89 /* MetalView.m in Sources */,
 				3C6931112535482600B2FF89 /* ViewController.m in Sources */,
 				3C6931192535482700B2FF89 /* main.m in Sources */,
 				3C69312625354EC500B2FF89 /* Shader.metal in Sources */,
@@ -293,6 +287,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MetalSample/MetalSample.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MetalSample/Info.plist;
@@ -311,6 +306,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MetalSample/MetalSample.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MetalSample/Info.plist;
