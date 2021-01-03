@@ -56,6 +56,8 @@ class ViewController: NSViewController {
         let threadsPerThreadGroup = MTLSizeMake(w, h, 1)
         let threadgroupsPerGrid = MTLSizeMake((size.0 + w - 1) / w, (size.1 + h - 1) / h, 1)
 
+        print("threadsPerThreadGroup: \(threadsPerThreadGroup)")
+        print("threadgroupsPerGrid: \(threadgroupsPerGrid)")
         var count = size.0 / w
         let start = CFAbsoluteTimeGetCurrent()
         let commandBuffer = commandQueue.makeCommandBuffer()

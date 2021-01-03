@@ -76,6 +76,7 @@ void ComputeKernelShader(constant DataBuffer &inBuffer [[ buffer(0) ]],
 }
 
 
+#define THREAD_GROUP_OUT_SIZE 64
 kernel
 void ComputeKernelShader2(constant uint8_t *inBuffer [[ buffer(0) ]],
                           constant uint &col [[ buffer(1) ]],
@@ -85,28 +86,13 @@ void ComputeKernelShader2(constant uint8_t *inBuffer [[ buffer(0) ]],
                          uint2 thread_position_in_threadgroup [[ thread_position_in_threadgroup ]]
                          /*uint2 grid [[ thread_position_in_grid ]]*/) {
         
-    uint groupIndex = thread_position_in_threadgroup.x;
     uint groupSize = threads_per_threadgroup.x * threads_per_threadgroup.y;
     uint startIndex = (threadgroup_position_in_grid.y * col + threadgroup_position_in_grid.x) * groupSize;
-    uint outStartIndex = (threadgroup_position_in_grid.y * col + threadgroup_position_in_grid.x) * 64;
-    uint endIndex = groupSize;//(threads_per_threadgroup.x * threads_per_threadgroup.y);
+    uint outStartIndex = (threadgroup_position_in_grid.y * col + threadgroup_position_in_grid.x) * THREAD_GROUP_OUT_SIZE;
+    uint endIndex = groupSize;
 
     uint total = 0;
-    uint buffer[64];
-    
-//    outBuffer[startIndex] = inBuffer[startIndex];
-//    outBuffer[startIndex+1] = inBuffer[startIndex+1];
-//    outBuffer[startIndex+2] = inBuffer[startIndex+2];
-//    outBuffer[startIndex+3] = inBuffer[startIndex+3];
-//    for (uint x = 0; x < endIndex; x++) {
-//        outBuffer[startIndex + x] = inBuffer[startIndex + x];
-//    }
-//    outBuffer[12] = 4;
-//
-//    outBuffer[13] = 4;
-    
-    
-//    return;
+    uint8_t buffer[THREAD_GROUP_OUT_SIZE];
     
     for (uint x = 0, tx = 0; x < endIndex; x += 4, tx ++) {
         uint8_t R = inBuffer[startIndex + x];
@@ -117,8 +103,8 @@ void ComputeKernelShader2(constant uint8_t *inBuffer [[ buffer(0) ]],
         buffer[tx] = gray;
     }
 
-    uint grayAverage = total / 64;
-    for (uint x = 0, tx = 0; x < 64; x++) {
+    uint grayAverage = total / THREAD_GROUP_OUT_SIZE;
+    for (uint x = 0, tx = 0; x < THREAD_GROUP_OUT_SIZE; x++) {
         uint8_t v = inBuffer[outStartIndex + x];
         outBuffer[outStartIndex + x] = v >= grayAverage ? 1 : 0;
         tx++;
