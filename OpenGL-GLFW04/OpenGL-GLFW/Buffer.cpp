@@ -144,7 +144,7 @@ void Buffer::Draw(GLuint programId, float time) const {
     //    };
 
     glm::mat4 projectionMatrix = glm::frustum(-1.f, 1.f, -1.f, 1.f, 1.f, 1000.f);
-    glm::vec3 eye              = glm::vec3(0.0f, 0.0f, 2.0f);
+    glm::vec3 eye              = glm::vec3(0.0f, 0.0f, 1.0f);
     glm::vec3 center           = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 up               = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::mat4 viewMatrix       = glm::lookAt(eye, center, up);
@@ -177,8 +177,8 @@ void Buffer::Draw(GLuint programId, float time) const {
         }
     }
 
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(-degree), glm::vec3(1.0, 0.0, 0.0));
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(2.0, 2.0, 0.0));
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(degree), glm::vec3(1.0, 0.0, 0.0));
+//    modelMatrix = glm::scale(modelMatrix, glm::vec3(5.0, 5.0, 0.0));
 
     glm::mat4 mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
     glUniformMatrix4fv(glGetUniformLocation(programId, "mvp"), 1, GL_FALSE, glm::value_ptr(mvpMatrix));
