@@ -19,17 +19,17 @@ using namespace std;
 class Shader {
 
   public:
-	Shader(const string &shaderFileName);
-	~Shader();
+    Shader(const string &shaderFileName);
+    ~Shader();
 
-	GLuint getVS() const { return vs; };
-	GLuint getFS() const { return fs; };
+    GLuint getVS() const { return vs; };
+    GLuint getFS() const { return fs; };
 
   private:
-	GLuint vs;  // 顶点
-	GLuint fs;  // 片段
-	const string parseShaderString(const string &filePath);
-	GLuint compileShader(GLenum type, const string &source);
+    GLuint vs;  // 顶点
+    GLuint fs;  // 片段
+    const string parseShaderString(const string &filePath);
+    GLuint compileShader(GLenum type, const string &source);
 };
 }  // namespace gl
 

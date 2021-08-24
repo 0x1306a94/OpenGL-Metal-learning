@@ -144,17 +144,17 @@ void Buffer::Draw(GLuint programId, float time) const {
     //    };
 
     glm::mat4 projectionMatrix = glm::frustum(-1.f, 1.f, -1.f, 1.f, 1.f, 1000.f);
-    glm::vec3 eye              = glm::vec3(0.0f, 0.0f, 1.0f);
-    glm::vec3 center           = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 up               = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::mat4 viewMatrix       = glm::lookAt(eye, center, up);
+    glm::vec3 eye = glm::vec3(0.0f, 0.0f, 2.0f);
+    glm::vec3 center = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::mat4 viewMatrix = glm::lookAt(eye, center, up);
     // 单元矩阵
     glm::mat4 modelMatrix = glm::mat4(1);
 
     float degree = 0;
     for (int i = 0; i < keyframesCount - 1; i++) {
         float startTime = keyframes[i].time;
-        float endTime   = keyframes[i + 1].time;
+        float endTime = keyframes[i + 1].time;
         if (i == 0 && time < startTime) {
             degree = keyframes[i].value;
             break;
@@ -171,14 +171,14 @@ void Buffer::Draw(GLuint programId, float time) const {
             //            progress = elasticEaseInOut(progress);
             //            progress = bounceEaseOut(progress);
             float fromValue = keyframes[i].value;
-            float toValue   = keyframes[i + 1].value;
-            degree          = fromValue + progress * (toValue - fromValue);
+            float toValue = keyframes[i + 1].value;
+            degree = fromValue + progress * (toValue - fromValue);
             break;
         }
     }
 
     modelMatrix = glm::rotate(modelMatrix, glm::radians(degree), glm::vec3(1.0, 0.0, 0.0));
-//    modelMatrix = glm::scale(modelMatrix, glm::vec3(5.0, 5.0, 0.0));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(2.0, 2.0, 0.0));
 
     glm::mat4 mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
     glUniformMatrix4fv(glGetUniformLocation(programId, "mvp"), 1, GL_FALSE, glm::value_ptr(mvpMatrix));

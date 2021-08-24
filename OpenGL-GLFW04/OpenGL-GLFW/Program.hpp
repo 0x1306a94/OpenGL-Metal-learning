@@ -20,16 +20,16 @@ class Buffer;
 class Program {
 
   public:
-	Program(std::shared_ptr<Shader> shader, std::shared_ptr<Buffer> buffer);
-	~Program();
+    Program(std::shared_ptr<Shader> shader, std::shared_ptr<Buffer> buffer);
+    ~Program();
 
-	void Use();
-	void Draw(float time);
+    void Use();
+    void Draw(float time);
 
   private:
-	GLuint program;
-	std::shared_ptr<Shader> shader;
-	std::shared_ptr<Buffer> buffer;
+    GLuint program;
+    std::shared_ptr<Shader> shader;
+    std::shared_ptr<Buffer> buffer;
 };
 }  // namespace gl
 

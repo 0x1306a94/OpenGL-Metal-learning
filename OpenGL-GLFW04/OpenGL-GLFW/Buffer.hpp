@@ -30,7 +30,7 @@ class Buffer {
   private:
     GLuint VBO, VAO, EBO, texture;
     glm::vec2 m_size;
-    
+
     KeyFrameParams keyframes[keyframesCount];
 };
 }  // namespace gl
