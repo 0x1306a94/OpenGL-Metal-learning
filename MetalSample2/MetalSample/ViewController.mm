@@ -124,7 +124,7 @@ struct KeyFrameParams {
     renderRect = CGRectApplyAffineTransform(renderRect, CGAffineTransformMakeScale(NSScreen.mainScreen.backingScaleFactor, NSScreen.mainScreen.backingScaleFactor));
     float vertices[16], sourceCoordinates[8];
 
-    renderRect = AVMakeRectWithAspectRatioInsideRect(drawableSize, CGRectMake(0, 0, self.imageTexture.width, self.imageTexture.height));
+    renderRect = AVMakeRectWithAspectRatioInsideRect(CGSizeMake(self.imageTexture.width, self.imageTexture.height), CGRectMake(0, 0, drawableSize.width, drawableSize.height));
     renderRect.origin.x = (drawableSize.width - renderRect.size.width) * 0.5;
     renderRect.origin.y = (drawableSize.height - renderRect.size.height) * 0.5;
     genMTLVertices(renderRect, drawableSize, vertices, YES, YES);
@@ -159,7 +159,7 @@ struct KeyFrameParams {
 - (void)makeTexture {
     MTKTextureLoader *loader = [[MTKTextureLoader alloc] initWithDevice:self.device];
 
-    NSImage *image = [NSImage imageNamed:@"test.jpg"];
+    NSImage *image = [NSImage imageNamed:@"76824d1cd998d76ce18040a48fd49b920cb377b1.JPG"];
     NSSize imageSize = [image size];
 
     CGContextRef bitmapContext = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, [[NSColorSpace genericRGBColorSpace] CGColorSpace], kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
@@ -220,14 +220,6 @@ struct KeyFrameParams {
 
         //        float width = drawableSize.width;
         //        float height = drawableSize.height;
-        float4x4 projectionMatrix = frustum(-1.f, 1.f, -1.f, 1.f, 1.f, 1000.f);
-        //        projectionMatrix          = perspective_fov(65.f, width, height, 0.1, 100.f);
-        //        projectionMatrix = ortho2d_oc(-1, 1, -1, 1, -1, 1);
-        float3 eye = {0.f, 0.f, 1.f};
-        float3 center = {0.f, 0.f, 0.f};
-        float3 up = {0.f, 1.f, 0.f};
-
-        float4x4 viewMatrix = lookAt(eye, center, up);
 
         static float beginTime = -1;
         if (beginTime == -1) {
@@ -266,8 +258,23 @@ struct KeyFrameParams {
             beginTime = CACurrentMediaTime();
         }
         // matrix_identity_float4x4
-        // 需要加 translate z -1
-        float4x4 modelMatrix = translate(0.0, 0.0, -1.0) * rotate(degree, 1.0, 0, 0);  // * scale(2.0, 2.0, .0);
+        // frustum_oc 右手坐标系 ???
+        //        float4x4 projectionMatrix = frustum_oc(-1.f, 1.f, -1.f, 1.f, 1.f, 1000.f);
+        //        float3 eye = {0.f, 0.f, 2.f};
+        //        float3 center = {0.f, 0.f, 0.f};
+        //        float3 up = {0.f, 1.f, 0.f};
+        //
+        //        float4x4 viewMatrix = lookAt(eye, center, up);
+        //        float4x4 modelMatrix = rotate(degree, 1.0, 0, 0) * scale(2.0, 2.0, .0);
+
+        // frustum 左手坐标系???
+        float4x4 projectionMatrix = frustum(-1.f, 1.f, -1.f, 1.f, 1.f, 1000.f);
+        float3 eye = {0.f, 0.f, 2.f};
+        float3 center = {0.f, 0.f, 0.f};
+        float3 up = {0.f, 1.f, 0.f};
+
+        float4x4 viewMatrix = lookAt(eye, center, up);
+        float4x4 modelMatrix = rotate(degree, 1.0, 0, 0);
 
         SSUniform uniform = (SSUniform){
             .projection = projectionMatrix,
