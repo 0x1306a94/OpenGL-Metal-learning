@@ -306,7 +306,7 @@
                  但是在矩阵乘法上,需要从右往左读, 也就是下面的计算顺序
                  */
                 modelMatrix = AAPL::translate(-params.tx, -params.ty, 0) * AAPL::rotate(degree, 0.0, 1.0, 0) * AAPL::translate(params.tx, params.ty, 0);
-            } else if (time >= 2.0) {
+            } else if (time >= endTime) {
                 progress = 1.0;
             }
 
