@@ -104,7 +104,7 @@ simd::float4x4 ortho2d(const simd::float3 &origin,
 void genQuadVertices(simd::float4 result[4], const simd::float4 rect, const simd::float2 containerSize, bool reverse = false, bool normalized = false);
 
 // 倒N
-void genQuadTextureCoordinates(simd::float2 result[4], const simd::float4 rect, const simd::float2 containerSize);
+void genQuadTextureCoordinates(simd::float2 result[4], const simd::float4 rect, const simd::float2 containerSize, bool hflip = false, bool vflip = false);
 
 SSVertex makeVertex(simd::float4 position, simd::float2 textureCoordinate);
 

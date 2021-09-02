@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -701,7 +702,7 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="250"/>
+            <point key="canvasLocation" x="-8" y="413"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
@@ -713,6 +714,38 @@
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="90I-Ba-bIg" customClass="MTKView">
                                 <rect key="frame" x="0.0" y="0.0" width="360" height="640"/>
+                                <subviews>
+                                    <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OWP-o0-vtV">
+                                        <rect key="frame" x="18" y="14" width="324" height="28"/>
+                                        <sliderCell key="cell" state="on" alignment="left" maxValue="1" tickMarkPosition="above" sliderType="linear" id="XIz-KZ-J0H"/>
+                                        <connections>
+                                            <action selector="silderAction:" target="XfG-lQ-9wD" id="Q5E-7n-GG1"/>
+                                        </connections>
+                                    </slider>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gfS-Xd-kxp">
+                                        <rect key="frame" x="169" y="50" width="23" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="0.0" id="M8Z-aB-f74">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="VJi-91-bk0">
+                                        <rect key="frame" x="300" y="48" width="42" height="25"/>
+                                        <connections>
+                                            <action selector="switchAction:" target="XfG-lQ-9wD" id="f4Q-Fl-KXB"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="VJi-91-bk0" secondAttribute="trailing" constant="20" id="62v-cs-Vpx"/>
+                                    <constraint firstAttribute="trailing" secondItem="OWP-o0-vtV" secondAttribute="trailing" constant="20" id="9HM-Oi-wux"/>
+                                    <constraint firstItem="OWP-o0-vtV" firstAttribute="top" secondItem="VJi-91-bk0" secondAttribute="bottom" constant="10" id="Yk9-ne-xcU"/>
+                                    <constraint firstItem="gfS-Xd-kxp" firstAttribute="centerX" secondItem="90I-Ba-bIg" secondAttribute="centerX" id="cYK-XM-0Yb"/>
+                                    <constraint firstItem="OWP-o0-vtV" firstAttribute="leading" secondItem="90I-Ba-bIg" secondAttribute="leading" constant="20" id="gjo-6h-xFB"/>
+                                    <constraint firstAttribute="bottom" secondItem="OWP-o0-vtV" secondAttribute="bottom" constant="20" id="jSh-An-uQs"/>
+                                    <constraint firstItem="OWP-o0-vtV" firstAttribute="top" secondItem="gfS-Xd-kxp" secondAttribute="bottom" constant="10" id="kju-s2-jqj"/>
+                                </constraints>
                             </customView>
                         </subviews>
                         <constraints>
@@ -724,11 +757,14 @@
                     </view>
                     <connections>
                         <outlet property="metalView" destination="90I-Ba-bIg" id="qRP-Cl-gYI"/>
+                        <outlet property="slider" destination="OWP-o0-vtV" id="KsY-7R-13q"/>
+                        <outlet property="switchView" destination="VJi-91-bk0" id="Z4d-pO-iFT"/>
+                        <outlet property="timeLabel" destination="gfS-Xd-kxp" id="Obs-eb-8k8"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="426" y="413"/>
         </scene>
     </scenes>
 </document>

@@ -13,7 +13,7 @@
 		3C428CA426C01CE400D8311D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C428CA326C01CE400D8311D /* AVFoundation.framework */; };
 		3C5A7F0326B5703200987475 /* 76824d1cd998d76ce18040a48fd49b920cb377b1.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 3C5A7F0226B5703200987475 /* 76824d1cd998d76ce18040a48fd49b920cb377b1.JPG */; };
 		3C69310E2535482600B2FF89 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C69310D2535482600B2FF89 /* AppDelegate.m */; };
-		3C6931112535482600B2FF89 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3C6931102535482600B2FF89 /* ViewController.mm */; };
+		3C6931112535482600B2FF89 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C6931102535482600B2FF89 /* ViewController.m */; };
 		3C6931132535482700B2FF89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C6931122535482700B2FF89 /* Assets.xcassets */; };
 		3C6931162535482700B2FF89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C6931142535482700B2FF89 /* Main.storyboard */; };
 		3C6931192535482700B2FF89 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C6931182535482700B2FF89 /* main.m */; };
@@ -35,7 +35,7 @@
 		3C69310C2535482600B2FF89 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3C69310D2535482600B2FF89 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3C69310F2535482600B2FF89 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3C6931102535482600B2FF89 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		3C6931102535482600B2FF89 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		3C6931122535482700B2FF89 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C6931152535482700B2FF89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3C6931172535482700B2FF89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -113,7 +113,7 @@
 				3C8FA25D26DF584E0059002E /* KKRenderer.h */,
 				3C8FA25E26DF584E0059002E /* KKRenderer.mm */,
 				3C69310F2535482600B2FF89 /* ViewController.h */,
-				3C6931102535482600B2FF89 /* ViewController.mm */,
+				3C6931102535482600B2FF89 /* ViewController.m */,
 				3C6931122535482700B2FF89 /* Assets.xcassets */,
 				3C6931142535482700B2FF89 /* Main.storyboard */,
 				3C6931172535482700B2FF89 /* Info.plist */,
@@ -194,7 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C8FA65526DFA2F50059002E /* AnimationParams.cpp in Sources */,
-				3C6931112535482600B2FF89 /* ViewController.mm in Sources */,
+				3C6931112535482600B2FF89 /* ViewController.m in Sources */,
 				3C428C9826C014E800D8311D /* AAPLTransforms.mm in Sources */,
 				3C8FA25F26DF584E0059002E /* KKRenderer.mm in Sources */,
 				3C6931192535482700B2FF89 /* main.m in Sources */,

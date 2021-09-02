@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface KKRenderer : NSObject <MTKViewDelegate>
 - (instancetype)initWithView:(MTKView *)view;
+
+- (void)updateTime:(float)time;
 @end
 
 NS_ASSUME_NONNULL_END

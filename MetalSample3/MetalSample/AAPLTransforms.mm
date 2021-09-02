@@ -519,15 +519,19 @@ void AAPL::genQuadVertices(simd::float4 result[4], const simd::float4 targetRect
     result[3] = simd::make_float4(originX + width, originY + height, 0.0, 1.0);
 }
 
-void AAPL::genQuadTextureCoordinates(simd::float2 result[4], const simd::float4 rect, const simd::float2 containerSize) {
+void AAPL::genQuadTextureCoordinates(simd::float2 result[4], const simd::float4 rect, const simd::float2 containerSize, bool hflip, bool vflip) {
     // 左下
-    result[0] = simd::make_float2(rect.x / containerSize.x, (rect.y + rect.w) / containerSize.y);
+    result[0] = simd::make_float2(hflip ? (1 - (rect.x / containerSize.x)) : (rect.x / containerSize.x),
+                                  vflip ? (1 - ((rect.y + rect.w) / containerSize.y)) : ((rect.y + rect.w) / containerSize.y));
     // 左上
-    result[1] = simd::make_float2(rect.x / containerSize.x, (rect.y) / containerSize.y);
+    result[1] = simd::make_float2(hflip ? (1 - (rect.x / containerSize.x)) : (rect.x / containerSize.x),
+                                  vflip ? (1 - (rect.y / containerSize.y)) : (rect.y / containerSize.y));
     // 右下
-    result[2] = simd::make_float2((rect.x + rect.z) / containerSize.x, (rect.y + rect.w) / containerSize.y);
+    result[2] = simd::make_float2(hflip ? (1 - ((rect.x + rect.z) / containerSize.x)) : ((rect.x + rect.z) / containerSize.x),
+                                  vflip ? (1 - ((rect.y + rect.w) / containerSize.y)) : ((rect.y + rect.w) / containerSize.y));
     // 右上
-    result[3] = simd::make_float2((rect.x + rect.z) / containerSize.x, (rect.y) / containerSize.y);
+    result[3] = simd::make_float2(hflip ? (1 - ((rect.x + rect.z) / containerSize.x)) : ((rect.x + rect.z) / containerSize.x),
+                                  vflip ? (1 - (rect.y / containerSize.y)) : (rect.y / containerSize.y));
 }
 
 SSVertex AAPL::makeVertex(simd::float4 position, simd::float2 textureCoordinate) {
