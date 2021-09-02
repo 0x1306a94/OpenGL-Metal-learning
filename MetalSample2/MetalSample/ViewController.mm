@@ -269,7 +269,7 @@ struct KeyFrameParams {
 
         // frustum 左手坐标系???
         float4x4 projectionMatrix = frustum(-1.f, 1.f, -1.f, 1.f, 1.f, 1000.f);
-        float3 eye = {0.f, 0.f, 2.f};
+        float3 eye = {0.f, 0.f, -2.f};
         float3 center = {0.f, 0.f, 0.f};
         float3 up = {0.f, 1.f, 0.f};
 

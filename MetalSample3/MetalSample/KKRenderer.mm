@@ -18,12 +18,14 @@
 @interface KKRenderer ()
 @property (nonatomic, strong) id<MTLDevice> device;
 @property (nonatomic, strong) MTKView *view;
-
+@property (nonatomic, strong) MTKTextureLoader *textureLoader;
 @property (nonatomic, strong) id<MTLRenderPipelineState> pipelineState;
 @property (nonatomic, strong) id<MTLCommandQueue> commandQueue;
-@property (nonatomic, strong) id<MTLTexture> imageTexture;
+@property (nonatomic, strong) id<MTLTexture> imageTexture0;
+@property (nonatomic, strong) id<MTLTexture> imageTexture1;
 @property (nonatomic, strong) id<MTLBuffer> vertexBuffer;
 @property (nonatomic, strong) id<MTLBuffer> uniformBuffer;
+@property (nonatomic, strong) id<MTLBuffer> progressBuffer;
 @property (nonatomic, strong) id<MTLBuffer> indexBuffer;
 @property (nonatomic, assign) NSInteger vertexCount;
 @property (nonatomic, assign) NSInteger indexCount;
@@ -35,10 +37,21 @@
 @end
 
 @implementation KKRenderer
+- (void)dealloc {
+#if DEBUG
+    NSLog(@"[%@ dealloc]", NSStringFromClass(self.class));
+#endif
+    if (_animationParams != NULL) {
+        free(_animationParams);
+        _animationParams = NULL;
+    }
+}
 - (instancetype)initWithView:(MTKView *)view {
     if (self == [super init]) {
         self.device = view.device;
+        self.textureLoader = [[MTKTextureLoader alloc] initWithDevice:self.device];
         self.view = view;
+        _animationParams = NULL;
         [self commonInit];
     }
     return self;
@@ -75,9 +88,12 @@
 }
 
 - (void)makeTexture {
-    MTKTextureLoader *loader = [[MTKTextureLoader alloc] initWithDevice:self.device];
+    self.imageTexture0 = [self loadTexture:@"76824d1cd998d76ce18040a48fd49b920cb377b1.JPG"];
+    self.imageTexture1 = [self loadTexture:@"7DFF4B43-819E-48AD-88E1-DE68CA71D33C.jpeg"];
+}
 
-    NSImage *image = [NSImage imageNamed:@"76824d1cd998d76ce18040a48fd49b920cb377b1.JPG"];
+- (id<MTLTexture>)loadTexture:(NSString *)imageName {
+    NSImage *image = [NSImage imageNamed:imageName];
     NSSize imageSize = [image size];
 
     CGContextRef bitmapContext = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, [[NSColorSpace genericRGBColorSpace] CGColorSpace], kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
@@ -95,10 +111,11 @@
     CGContextRelease(bitmapContext);
 
     NSError *error = nil;
-    self.imageTexture = [loader newTextureWithCGImage:cgImage options:@{MTKTextureLoaderOptionSRGB: @(NO), MTKTextureLoaderOriginTopLeft: @YES} error:&error];
+    id<MTLTexture> imageTexture = [self.textureLoader newTextureWithCGImage:cgImage options:@{MTKTextureLoaderOptionSRGB: @(NO), MTKTextureLoaderOriginTopLeft: @YES} error:&error];
     if (error) {
         NSAssert(NO, @"%@", error);
     }
+    return imageTexture;
 }
 
 - (void)makeBuffers {
@@ -108,7 +125,7 @@
         return;
     }
     CGRect renderRect = CGRectMake(0, 0, drawableSize.width, drawableSize.height);
-    CGSize imageSize = CGSizeMake(self.imageTexture.width, self.imageTexture.height);
+    CGSize imageSize = CGSizeMake(self.imageTexture0.width, self.imageTexture0.height);
     // 按比例计算大小
     CGRect insideRect = AVMakeRectWithAspectRatioInsideRect(imageSize, renderRect);
     insideRect.size.width = floor(insideRect.size.width);
@@ -131,15 +148,17 @@
     _vertexBuffer = [self.device newBufferWithLength:sizeof(SSVertex) * self.vertexCount options:MTLResourceStorageModeShared];
     _uniformBuffer = [self.device newBufferWithLength:sizeof(SSUniform) * self.instanceCount options:MTLResourceStorageModeShared];
     _indexBuffer = [self.device newBufferWithLength:sizeof(UInt16) * self.indexCount options:MTLResourceStorageModeShared];
+    _progressBuffer = [self.device newBufferWithLength:sizeof(simd::float1) * self.indexCount options:MTLResourceStorageModeShared];
 
     SSVertex *vertexContents = static_cast<SSVertex *>(_vertexBuffer.contents);
     SSUniform *uniformContents = static_cast<SSUniform *>(_uniformBuffer.contents);
+    SSProgressUniform *progressContents = static_cast<SSProgressUniform *>(_progressBuffer.contents);
     UInt16 *indexContents = static_cast<UInt16 *>(_indexBuffer.contents);
     // 画布大小
     simd::float2 containerSize = simd::make_float2(drawableSize.width, drawableSize.height);
 
     float4x4 projectionMatrix = AAPL::frustum(-1.f, 1.f, -1.f, 1.f, 1.f, 1000.f);
-    float3 eye = {0.f, 0.f, 2.f};
+    float3 eye = {0.f, 0.f, -2.f};
     float3 center = {0.f, 0.f, 0.f};
     float3 up = {0.f, 1.f, 0.f};
 
@@ -148,15 +167,17 @@
     _animationParams = (AnimationParams *)malloc(sizeof(AnimationParams) * self.instanceCount);
 
     for (NSInteger i = 0; i < self.instanceCount; i++) {
-        float4x4 modelMatrix = AAPL::rotate(0, 0.0, 1.0, 0);
+        float4x4 modelMatrix = matrix_identity_float4x4;
         uniformContents[i] = (SSUniform){
             .projection = projectionMatrix,
             .view = viewMatrix,
             .model = modelMatrix,
         };
 
+        progressContents[0].progress = 0;
+
         _animationParams[i] = (AnimationParams){
-            .time = static_cast<float>(i) * 0.025f,
+            .time = static_cast<float>(i) * 0.025f + 2.0f,
             .duration = 0.4,
             .form = 0,
             .to = -180,
@@ -178,7 +199,6 @@
             do {
                 simd::float4 _positions[4] = {0};
                 AAPL::genQuadVertices(_positions, simd::make_float4(CGRectGetMidX(targetRect), CGRectGetMidY(targetRect), targetRect.size.width, targetRect.size.height), containerSize, true, true);
-
                 _animationParams[rectIdx].tx = 0 - _positions[1].x;
                 _animationParams[rectIdx].ty = 0 - _positions[1].y;
             } while (0);
@@ -266,16 +286,17 @@
         float time = CACurrentMediaTime() - beginTime;
 
         SSUniform *uniformContents = static_cast<SSUniform *>(self.uniformBuffer.contents);
-
+        SSProgressUniform *progressContents = static_cast<SSProgressUniform *>(self.progressBuffer.contents);
         for (int i = 0; i < self.instanceCount; i++) {
 
             float4x4 modelMatrix = matrix_identity_float4x4;
             float degree = 0;
+            float progress = 0.0;
             AnimationParams params = self.animationParams[i];
             float startTime = params.time;
             float endTime = startTime + params.duration;
             if (time >= startTime && time <= endTime) {
-                float progress = (time - startTime) / params.duration;
+                progress = (time - startTime) / params.duration;
                 float fromValue = params.form;
                 float toValue = params.to;
                 degree = fromValue + progress * (toValue - fromValue);
@@ -285,12 +306,15 @@
                  但是在矩阵乘法上,需要从右往左读, 也就是下面的计算顺序
                  */
                 modelMatrix = AAPL::translate(-params.tx, -params.ty, 0) * AAPL::rotate(degree, 0.0, 1.0, 0) * AAPL::translate(params.tx, params.ty, 0);
+            } else if (time >= 2.0) {
+                progress = 1.0;
             }
 
+            progressContents[i].progress = progress;
             uniformContents[i].model = modelMatrix;
         }
 
-        if (time >= 2.0) {
+        if (time >= 4.0) {
             beginTime = CACurrentMediaTime();
         }
     } while (0);
@@ -303,11 +327,15 @@
     id<MTLRenderCommandEncoder> commandEncoder = [commandBuffer renderCommandEncoderWithDescriptor:passDescriptor];
     [commandEncoder setRenderPipelineState:self.pipelineState];
     [commandEncoder setViewport:(MTLViewport){0, 0, drawableSize.width, drawableSize.height, -1, 1}];
+    //    [commandEncoder setCullMode:MTLCullModeFront];
     [commandEncoder setVertexBuffer:self.vertexBuffer offset:0 atIndex:SSVertexInputIndexVertices];
     [commandEncoder setVertexBuffer:self.uniformBuffer offset:0 atIndex:SSVertexInputIndexUniforms];
-    [commandEncoder setFragmentTexture:self.imageTexture atIndex:SSFragmentTextureIndexOne];
-
-    [commandEncoder drawPrimitives:MTLPrimitiveTypeTriangleStrip vertexStart:0 vertexCount:4 instanceCount:self.instanceCount];
+    uint vertexCount = 4;
+    [commandEncoder setVertexBytes:&vertexCount length:sizeof(uint) atIndex:SSVertexInputIndexVertexCount];
+    [commandEncoder setFragmentBuffer:self.progressBuffer offset:0 atIndex:SSVertexInputIndexUniforms];
+    [commandEncoder setFragmentTexture:self.imageTexture0 atIndex:SSFragmentTextureIndexOne];
+    [commandEncoder setFragmentTexture:self.imageTexture1 atIndex:SSFragmentTextureIndexTow];
+    [commandEncoder drawPrimitives:MTLPrimitiveTypeTriangleStrip vertexStart:0 vertexCount:vertexCount instanceCount:self.instanceCount];
     //    [commandEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle indexCount:self.indexCount indexType:MTLIndexTypeUInt16 indexBuffer:self.indexBuffer indexBufferOffset:0];
     [commandEncoder endEncoding];
 

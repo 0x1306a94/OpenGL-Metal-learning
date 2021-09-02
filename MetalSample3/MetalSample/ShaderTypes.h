@@ -23,13 +23,19 @@ typedef struct {
     float4x4 model;
 } SSUniform;
 
+typedef struct {
+    float progress;
+} SSProgressUniform;
+
 typedef enum SSVertexInputIndex {
     SSVertexInputIndexVertices = 0,
     SSVertexInputIndexUniforms = 1,
+    SSVertexInputIndexVertexCount = 2,
 } SSVertexInputIndex;
 
 typedef enum SSFragmentTextureIndex {
     SSFragmentTextureIndexOne = 0,
+    SSFragmentTextureIndexTow = 1,
 } SSFragmentTextureIndex;
 
 #endif /* ShaderTypes_h */
