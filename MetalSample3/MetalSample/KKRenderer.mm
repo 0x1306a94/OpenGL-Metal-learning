@@ -156,10 +156,10 @@
         };
 
         _animationParams[i] = (AnimationParams){
-            .time = static_cast<float>(i) * 0.035f,
-            .duration = 0.35,
+            .time = static_cast<float>(i) * 0.025f,
+            .duration = 0.4,
             .form = 0,
-            .to = -360,
+            .to = -180,
         };
     }
 
@@ -266,7 +266,10 @@
         float time = CACurrentMediaTime() - beginTime;
 
         SSUniform *uniformContents = static_cast<SSUniform *>(self.uniformBuffer.contents);
+
         for (int i = 0; i < self.instanceCount; i++) {
+
+            float4x4 modelMatrix = matrix_identity_float4x4;
             float degree = 0;
             AnimationParams params = self.animationParams[i];
             float startTime = params.time;
@@ -276,9 +279,14 @@
                 float fromValue = params.form;
                 float toValue = params.to;
                 degree = fromValue + progress * (toValue - fromValue);
+                /*
+                 旋转 缩放 是以原点(0,0,0)为中心进行
+                 所以需要 先平移到 原点 -> 旋转.缩放 -> 平移回去
+                 但是在矩阵乘法上,需要从右往左读, 也就是下面的计算顺序
+                 */
+                modelMatrix = AAPL::translate(-params.tx, -params.ty, 0) * AAPL::rotate(degree, 0.0, 1.0, 0) * AAPL::translate(params.tx, params.ty, 0);
             }
 
-            float4x4 modelMatrix = AAPL::translate(-params.tx, -params.ty, 0) * AAPL::rotate(degree, 0.0, 1.0, 0) * AAPL::translate(params.tx, params.ty, 0);
             uniformContents[i].model = modelMatrix;
         }
 
