@@ -199,12 +199,18 @@
         [computeEncoder setBytes:&time length:sizeof(float) atIndex:0];
         [computeEncoder setBytes:&duration length:sizeof(float) atIndex:1];
 
-        MTLSize threadsPerGroup = {self.computeState.threadExecutionWidth, self.computeState.threadExecutionWidth, 1};
-        //        MTLSize threadsPerGroup = {16, 16, 1};
-        MTLSize numThreadgroups = {self.inputTexture.width / threadsPerGroup.width + 1,
-                                   self.inputTexture.height / threadsPerGroup.height + 1, 1};
+        //        MTLSize threadsPerGroup = {self.computeState.threadExecutionWidth, self.computeState.threadExecutionWidth, 1};
+        //        //        MTLSize threadsPerGroup = {16, 16, 1};
+        //        MTLSize numThreadgroups = {self.inputTexture.width / threadsPerGroup.width + 1,
+        //                                   self.inputTexture.height / threadsPerGroup.height + 1, 1};
+        //
+        NSUInteger wid = self.computeState.threadExecutionWidth;
+        NSUInteger hei = self.computeState.maxTotalThreadsPerThreadgroup / wid;
 
-        [computeEncoder dispatchThreadgroups:numThreadgroups threadsPerThreadgroup:threadsPerGroup];
+        MTLSize threadsPerGroup = {wid, hei, 1};
+        MTLSize threadsPerGrid = {(self.inputTexture.width + wid - 1) / wid, (self.inputTexture.height + hei - 1) / hei, 1};
+
+        [computeEncoder dispatchThreadgroups:threadsPerGrid threadsPerThreadgroup:threadsPerGroup];
         [computeEncoder endEncoding];
     } while (0);
 
