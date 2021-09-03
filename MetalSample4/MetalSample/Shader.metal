@@ -160,6 +160,11 @@ kernel void processAnimation(texture2d<half, access::write> outputTexture [[text
                              constant float *time [[buffer(0)]],
                              constant float *duration [[buffer(1)]],
                              uint2 gid [[thread_position_in_grid]]) {
+    if (gid.x > inputTexture.get_width() || gid.y > inputTexture.get_height()) {
+        // 超出原图大小, 不做处理
+        return;
+    }
+
     float timeValue = *time;
     float durationValue = *duration;
     float progress = timeValue / durationValue;

@@ -201,8 +201,8 @@
 
         MTLSize threadsPerGroup = {self.computeState.threadExecutionWidth, self.computeState.threadExecutionWidth, 1};
         //        MTLSize threadsPerGroup = {16, 16, 1};
-        MTLSize numThreadgroups = {self.inputTexture.width / threadsPerGroup.width,
-                                   self.inputTexture.height / threadsPerGroup.height, 1};
+        MTLSize numThreadgroups = {self.inputTexture.width / threadsPerGroup.width + 1,
+                                   self.inputTexture.height / threadsPerGroup.height + 1, 1};
 
         [computeEncoder dispatchThreadgroups:numThreadgroups threadsPerThreadgroup:threadsPerGroup];
         [computeEncoder endEncoding];
