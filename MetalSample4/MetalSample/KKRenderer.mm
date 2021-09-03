@@ -25,6 +25,7 @@
 
 @property (nonatomic, strong) id<MTLBuffer> vertexBuffer;
 
+@property (nonatomic, assign) BOOL supportNonUniformThreadgroupSize;
 @property (nonatomic, assign) CGRect renderRect;
 @property (nonatomic, assign) CGSize drawableSize;
 
@@ -43,6 +44,16 @@
         self.textureLoader = [[MTKTextureLoader alloc] initWithDevice:self.device];
         self.view = view;
         //        view.framebufferOnly = NO;
+        // https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf
+        self.supportNonUniformThreadgroupSize = ([self.device supportsFamily:MTLGPUFamilyCommon3] ||
+                                                 [self.device supportsFamily:MTLGPUFamilyApple4] ||
+                                                 [self.device supportsFamily:MTLGPUFamilyApple5] ||
+                                                 [self.device supportsFamily:MTLGPUFamilyApple6] ||
+                                                 [self.device supportsFamily:MTLGPUFamilyApple7] ||
+                                                 [self.device supportsFamily:MTLGPUFamilyMac1] ||
+                                                 [self.device supportsFamily:MTLGPUFamilyMac2] ||
+                                                 [self.device supportsFamily:MTLGPUFamilyMacCatalyst1] ||
+                                                 [self.device supportsFamily:MTLGPUFamilyMacCatalyst2]);
         view.paused = YES;
         [self commonInit];
     }
@@ -204,13 +215,21 @@
         //        MTLSize numThreadgroups = {self.inputTexture.width / threadsPerGroup.width + 1,
         //                                   self.inputTexture.height / threadsPerGroup.height + 1, 1};
         //
-        NSUInteger wid = self.computeState.threadExecutionWidth;
-        NSUInteger hei = self.computeState.maxTotalThreadsPerThreadgroup / wid;
+        NSUInteger w = self.computeState.threadExecutionWidth;
+        NSUInteger h = self.computeState.maxTotalThreadsPerThreadgroup / w;
 
-        MTLSize threadsPerGroup = {wid, hei, 1};
-        MTLSize threadsPerGrid = {(self.inputTexture.width + wid - 1) / wid, (self.inputTexture.height + hei - 1) / hei, 1};
+        //        MTLSize threadsPerGroup = {wid, hei, 1};
 
-        [computeEncoder dispatchThreadgroups:threadsPerGrid threadsPerThreadgroup:threadsPerGroup];
+        MTLSize threadsPerGroup = {w, h, 1};
+        if (self.supportNonUniformThreadgroupSize) {
+            MTLSize threadsPerGrid = {self.inputTexture.width, self.inputTexture.height, 1};
+            // https://developer.apple.com/documentation/metal/calculating_threadgroup_and_grid_sizes
+            [computeEncoder dispatchThreads:threadsPerGrid threadsPerThreadgroup:threadsPerGroup];
+        } else {
+            MTLSize threadsPerGrid = {(self.inputTexture.width + w - 1) / w, (self.inputTexture.height + h - 1) / h, 1};
+            [computeEncoder dispatchThreadgroups:threadsPerGrid threadsPerThreadgroup:threadsPerGroup];
+        }
+
         [computeEncoder endEncoding];
     } while (0);
 

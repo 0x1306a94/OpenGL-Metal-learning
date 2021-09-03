@@ -161,7 +161,10 @@ kernel void processAnimation(texture2d<half, access::write> outputTexture [[text
                              constant float *duration [[buffer(1)]],
                              uint2 gid [[thread_position_in_grid]]) {
     if (gid.x > inputTexture.get_width() || gid.y > inputTexture.get_height()) {
-        // 超出原图大小, 不做处理
+        /*
+         * 边界检查
+         * 在不支持 Non-uniform threadgroup size 特性时, 可能会填充一部分
+         */
         return;
     }
 
