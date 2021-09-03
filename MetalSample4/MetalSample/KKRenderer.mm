@@ -92,7 +92,7 @@
 
     MTLTextureDescriptor *desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:self.inputTexture.pixelFormat width:self.inputTexture.width height:self.inputTexture.height mipmapped:NO];
     desc.usage = MTLTextureUsageShaderRead | MTLTextureUsageShaderWrite;
-    desc.resourceOptions = MTLResourceStorageModeShared;
+    desc.storageMode = MTLStorageModeManaged;
 
     self.outTexture = [self.device newTextureWithDescriptor:desc];
 }
@@ -189,7 +189,7 @@
     id<MTLCommandBuffer> commandBuffer = [self.commandQueue commandBuffer];
 
     float time = self.time;
-    float duration = 2;
+    float duration = 3;
 
     do {
         id<MTLComputeCommandEncoder> computeEncoder = [commandBuffer computeCommandEncoder];

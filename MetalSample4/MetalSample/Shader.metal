@@ -38,7 +38,7 @@ fragment_main(RasterizerData input [[stage_in]],
 }
 
 half4 texture2D(texture2d<half, access::sample> texture, float2 uv) {
-    constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
+    constexpr sampler textureSampler(s_address::repeat, t_address::repeat, mag_filter::linear, min_filter::linear);
     return texture.sample(textureSampler, uv);
 }
 
