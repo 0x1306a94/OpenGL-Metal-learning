@@ -99,4 +99,11 @@ extension CGTypeFace: TypeFace {
         CTFontGetGlyphsForCharacters(self.font, utf16, &macGlyphs, scrCount)
         return macGlyphs[0]
     }
+
+    func metrics(size: Float) -> FontMetrics {
+        guard let scalerContext = CGScalerContext(typeface: self, size: size) else {
+            return FontMetrics()
+        }
+        return scalerContext.generateFontMetrics()
+    }
 }

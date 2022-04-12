@@ -52,9 +52,9 @@ final class CGScalerContext {
     private let font: CTFont
     private let transform: CGAffineTransform
 
-    init(typeface: TypeFace, size: Float, fauxBold: Bool = false, fauxItalic: Bool = false, verticalText: Bool = false) {
+    init?(typeface: TypeFace, size: Float, fauxBold: Bool = false, fauxItalic: Bool = false, verticalText: Bool = false) {
         guard let cfTypeface = typeface as? CGTypeFace else {
-            fatalError()
+            return nil
         }
 
         self.typeface = cfTypeface

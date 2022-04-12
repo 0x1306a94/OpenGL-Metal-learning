@@ -21,4 +21,8 @@ protocol TypeFace: AnyObject {
     func unitsPerEm() -> Int
 
     func hasColor() -> Bool
+
+    func glyphId(name: String) -> GlyphID
+
+    func metrics(size: Float) -> FontMetrics
 }
