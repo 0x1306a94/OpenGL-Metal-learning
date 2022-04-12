@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias GlyphID = UInt16
+
 protocol TypeFace: AnyObject {
     static func `default`() -> Self
 

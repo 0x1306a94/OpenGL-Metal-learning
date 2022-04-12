@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C324C0C2805097B00C584A4 /* UTF8Text.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C324C0B2805097B00C584A4 /* UTF8Text.c */; };
+		3C324C0E28050B4B00C584A4 /* UTF8Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C324C0D28050B4B00C584A4 /* UTF8Text.swift */; };
+		3C47920328054D6000A4D35E /* FontMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C47920228054D6000A4D35E /* FontMetrics.swift */; };
+		3C47920528054DD800A4D35E /* CGScalerContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C47920428054DD800A4D35E /* CGScalerContext.swift */; };
+		3C4792082805533300A4D35E /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4792072805533300A4D35E /* Matrix.swift */; };
+		3C47920A2805593A00A4D35E /* Interpolate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4792092805593A00A4D35E /* Interpolate.swift */; };
 		3C773239280426C70067B21D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C773238280426C70067B21D /* AppDelegate.swift */; };
 		3C77323B280426C70067B21D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C77323A280426C70067B21D /* ViewController.swift */; };
 		3C77323D280426C80067B21D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C77323C280426C80067B21D /* Assets.xcassets */; };
@@ -16,6 +22,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C324C0A2805097B00C584A4 /* UTF8Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UTF8Text.h; sourceTree = "<group>"; };
+		3C324C0B2805097B00C584A4 /* UTF8Text.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = UTF8Text.c; sourceTree = "<group>"; };
+		3C324C0D28050B4B00C584A4 /* UTF8Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTF8Text.swift; sourceTree = "<group>"; };
+		3C324C122805156400C584A4 /* bridge_header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridge_header.h; sourceTree = "<group>"; };
+		3C47920228054D6000A4D35E /* FontMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontMetrics.swift; sourceTree = "<group>"; };
+		3C47920428054DD800A4D35E /* CGScalerContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGScalerContext.swift; sourceTree = "<group>"; };
+		3C4792072805533300A4D35E /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
+		3C4792092805593A00A4D35E /* Interpolate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpolate.swift; sourceTree = "<group>"; };
 		3C773235280426C70067B21D /* MetalRenderTextSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalRenderTextSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C773238280426C70067B21D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C77323A280426C70067B21D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -37,6 +51,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C324C072805086D00C584A4 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				3C324C0A2805097B00C584A4 /* UTF8Text.h */,
+				3C324C0B2805097B00C584A4 /* UTF8Text.c */,
+				3C324C0D28050B4B00C584A4 /* UTF8Text.swift */,
+				3C4792092805593A00A4D35E /* Interpolate.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		3C4792062805532C00A4D35E /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				3C4792072805533300A4D35E /* Matrix.swift */,
+				3C47920228054D6000A4D35E /* FontMetrics.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
 		3C77322C280426C70067B21D = {
 			isa = PBXGroup;
 			children = (
@@ -56,12 +90,15 @@
 		3C773237280426C70067B21D /* MetalRenderTextSample */ = {
 			isa = PBXGroup;
 			children = (
+				3C4792062805532C00A4D35E /* Types */,
+				3C324C072805086D00C584A4 /* Utils */,
 				3C773247280427230067B21D /* CoreGraphics */,
 				3C773238280426C70067B21D /* AppDelegate.swift */,
 				3C77323A280426C70067B21D /* ViewController.swift */,
 				3C77323C280426C80067B21D /* Assets.xcassets */,
 				3C77323E280426C80067B21D /* Main.storyboard */,
 				3C773241280426C80067B21D /* MetalRenderTextSample.entitlements */,
+				3C324C122805156400C584A4 /* bridge_header.h */,
 			);
 			path = MetalRenderTextSample;
 			sourceTree = "<group>";
@@ -87,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				3C773248280427890067B21D /* CGTypeFace.swift */,
+				3C47920428054DD800A4D35E /* CGScalerContext.swift */,
 			);
 			path = implementation;
 			sourceTree = "<group>";
@@ -123,6 +161,7 @@
 				TargetAttributes = {
 					3C773234280426C70067B21D = {
 						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 1320;
 					};
 				};
 			};
@@ -162,7 +201,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C773249280427890067B21D /* CGTypeFace.swift in Sources */,
+				3C47920528054DD800A4D35E /* CGScalerContext.swift in Sources */,
+				3C4792082805533300A4D35E /* Matrix.swift in Sources */,
+				3C47920328054D6000A4D35E /* FontMetrics.swift in Sources */,
+				3C324C0E28050B4B00C584A4 /* UTF8Text.swift in Sources */,
 				3C77323B280426C70067B21D /* ViewController.swift in Sources */,
+				3C324C0C2805097B00C584A4 /* UTF8Text.c in Sources */,
+				3C47920A2805593A00A4D35E /* Interpolate.swift in Sources */,
 				3C77324C2804279A0067B21D /* TypeFace.swift in Sources */,
 				3C773239280426C70067B21D /* AppDelegate.swift in Sources */,
 			);
@@ -302,6 +347,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MetalRenderTextSample/MetalRenderTextSample.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
@@ -321,6 +367,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/MetalRenderTextSample/bridge_header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -330,6 +378,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MetalRenderTextSample/MetalRenderTextSample.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
@@ -349,6 +398,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/MetalRenderTextSample/bridge_header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

@@ -15,6 +15,23 @@ final class CGTypeFace {
     }
 }
 
+extension CGTypeFace {
+    static func toUTF16(uni: Int32, utf16: inout [UInt16]) -> Int {
+        if UInt32(uni) > 0x10FFFF {
+            return 0
+        }
+
+        let extra = (uni > 0xFFFF)
+        if extra {
+            utf16[0] = UInt16((0xD800 - 64) + (uni >> 10))
+            utf16[1] = UInt16(0xDC00 | (uni & 0x3FF))
+        } else {
+            utf16[0] = UInt16(uni)
+        }
+        return 1 + (extra ? 1 : 0)
+    }
+}
+
 extension CGTypeFace: TypeFace {
     static func `default`() -> Self {
         from(fontFamily: "Lucida Sans", fontStyle: "")
@@ -66,5 +83,20 @@ extension CGTypeFace: TypeFace {
     func hasColor() -> Bool {
         let traits = CTFontGetSymbolicTraits(self.font)
         return traits.contains(.traitColorGlyphs)
+    }
+
+    func glyphId(name: String) -> GlyphID {
+        var _name = name
+        let uni: Int32 = _name.withUTF8 {
+            $0.withMemoryRebound(to: Int8.self) {
+                guard var ptr = $0.baseAddress else { return 0 }
+                return uft8_text_next_char(ptr: &ptr)
+            }
+        }
+        var utf16: [UniChar] = [0, 0]
+        var macGlyphs: [UniChar] = [0, 0]
+        let scrCount = Self.toUTF16(uni: uni, utf16: &utf16)
+        CTFontGetGlyphsForCharacters(self.font, utf16, &macGlyphs, scrCount)
+        return macGlyphs[0]
     }
 }
