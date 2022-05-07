@@ -4,7 +4,7 @@
   * 将中间图片铺满做`高斯模糊`
   * `高斯模糊`的结果进行饱和度调整
   * 将清晰图片混合到中间区域
-  * 中间图片上下边界和后面模糊做过渡混合, 这个不会搞了
+  * 中间图片上下边界和后面模糊做混合
 ```metal
 fragment float4
 fragment_blur_blend(RasterizerData input [[stage_in]],
@@ -19,12 +19,14 @@ fragment_blur_blend(RasterizerData input [[stage_in]],
     float luminance = dot(color1.rgb, luminanceWeighting);
     float3 greyScaleColor = float3(luminance);
 
-    float4 result = float4(mix(greyScaleColor, color1.rgb, uniforms.saturation), color1.w);
+    float4 saturation = float4(mix(greyScaleColor, color1.rgb, uniforms.saturation), color1.w);
 
-    //    result = color1;
+    //    saturation = color1;
 
-    //    float4 dominantColor = float4(uniforms.dominantColor, 1.0);
-    //    result = float4(mix(result.rgb, dominantColor.rgb, 1.0 - result.a), 1.0);
+    //        float4 dominantColor = float4(uniforms.dominantColor, 1.0);
+    //    saturation = float4(mix(saturation.rgb, dominantColor.rgb, 1.0 - saturation.a), 1.0);
+
+    float4 finalColor = saturation;
 
     float topMaxY = uniforms.top;
     float bottomMaxY = 1.0 - uniforms.bottom;
@@ -37,24 +39,25 @@ fragment_blur_blend(RasterizerData input [[stage_in]],
         uv2.y = (uv2.y - uniforms.top) / len;
 
         float4 color2 = texture1.sample(textureSampler, uv2);
-        result = color2;
-        // 上下边缘进行混合?
-        //        if ((1.0 - uv.y) < topMaxY + uniforms.lenght) {
-        //            float sFactor = ((uv.y - uniforms.top) / uniforms.lenght);
-        //                        float dFactor = 1.0 - sFactor;
-        //            //            result = result * sFactor + color2 * dFactor;
-        //            //                        result = float4(mix(result.rgb, color2.rgb, sFactor), 1.0);
-        ////            result = mix(result, color2, sFactor);
-        //        } else if (uv.y > bottomMaxY && uv.y < bottomMaxY + uniforms.lenght) {
-        //            float sFactor = ((uv.y - bottomMaxY) / uniforms.lenght);
-        //            //                    float dFactor = 1.0 - sFactor;
-        //            //                    result = color1 * sFactor + color2 * dFactor;
-        //            //                    result = float4(mix(color2, result, sFactor), 1.0);
-        //        }
+
+        // 上下边界进行混合?
+        if ((1.0 - uv.y) < topMaxY + uniforms.lenght) {
+            float sFactor = 1.0 - ((1.0 - uv.y - uniforms.top) / uniforms.lenght);
+            float dFactor = 1.0 - sFactor;
+            finalColor = saturation * sFactor + color2 * dFactor;
+        } else if (uv.y >= (topMaxY) && uv.y < (topMaxY) + uniforms.lenght) {
+            float p = uv.y - topMaxY;
+
+            float sFactor = 1.0 - p / uniforms.lenght;
+            float dFactor = 1.0 - sFactor;
+            finalColor = saturation * sFactor + color2 * dFactor;
+        } else {
+            finalColor = color2;
+        }
     }
 
-    return result;
+    return finalColor;
 }
-
 ```
-![](IMG_5140.PNG)
+* 完成效果
+![](IMG_5142.PNG)
