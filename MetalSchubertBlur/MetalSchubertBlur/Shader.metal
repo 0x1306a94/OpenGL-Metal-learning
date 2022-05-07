@@ -33,7 +33,7 @@ fragment_resize(RasterizerData input [[stage_in]],
     constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
     float2 uv = input.textureCoordinate;
     half4 color = texture0.sample(textureSampler, uv);
-    return color;  //half4(1.0, 0.5, 0.0, 1.0);
+    return color;
 }
 
 fragment half4
@@ -42,7 +42,7 @@ fragment_blur(RasterizerData input [[stage_in]],
     constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
     float2 uv = input.textureCoordinate;
     half4 color = texture0.sample(textureSampler, uv);
-    return color;  //half4(1.0, 0.5, 0.0, 1.0);
+    return color;
 }
 
 fragment float4
@@ -58,12 +58,14 @@ fragment_blur_blend(RasterizerData input [[stage_in]],
     float luminance = dot(color1.rgb, luminanceWeighting);
     float3 greyScaleColor = float3(luminance);
 
-    float4 result = float4(mix(greyScaleColor, color1.rgb, uniforms.saturation), color1.w);
+    float4 saturation = float4(mix(greyScaleColor, color1.rgb, uniforms.saturation), color1.w);
 
-    //    result = color1;
+    //    saturation = color1;
 
-    //    float4 dominantColor = float4(uniforms.dominantColor, 1.0);
-    //    result = float4(mix(result.rgb, dominantColor.rgb, 1.0 - result.a), 1.0);
+    //        float4 dominantColor = float4(uniforms.dominantColor, 1.0);
+    //    saturation = float4(mix(saturation.rgb, dominantColor.rgb, 1.0 - saturation.a), 1.0);
+
+    float4 finalColor = saturation;
 
     float topMaxY = uniforms.top;
     float bottomMaxY = 1.0 - uniforms.bottom;
@@ -76,22 +78,23 @@ fragment_blur_blend(RasterizerData input [[stage_in]],
         uv2.y = (uv2.y - uniforms.top) / len;
 
         float4 color2 = texture1.sample(textureSampler, uv2);
-        result = color2;
-        // 上下边缘进行混合?
-        //        if ((1.0 - uv.y) < topMaxY + uniforms.lenght) {
-        //            float sFactor = ((uv.y - uniforms.top) / uniforms.lenght);
-        //                        float dFactor = 1.0 - sFactor;
-        //            //            result = result * sFactor + color2 * dFactor;
-        //            //                        result = float4(mix(result.rgb, color2.rgb, sFactor), 1.0);
-        ////            result = mix(result, color2, sFactor);
-        //        } else if (uv.y > bottomMaxY && uv.y < bottomMaxY + uniforms.lenght) {
-        //            float sFactor = ((uv.y - bottomMaxY) / uniforms.lenght);
-        //            //                    float dFactor = 1.0 - sFactor;
-        //            //                    result = color1 * sFactor + color2 * dFactor;
-        //            //                    result = float4(mix(color2, result, sFactor), 1.0);
-        //        }
+
+        // 上下边界进行混合?
+        if ((1.0 - uv.y) < topMaxY + uniforms.lenght) {
+            float sFactor = 1.0 - ((1.0 - uv.y - uniforms.top) / uniforms.lenght);
+            float dFactor = 1.0 - sFactor;
+            finalColor = saturation * sFactor + color2 * dFactor;
+        } else if (uv.y >= (topMaxY) && uv.y < (topMaxY) + uniforms.lenght) {
+            float p = uv.y - topMaxY;
+
+            float sFactor = 1.0 - p / uniforms.lenght;
+            float dFactor = 1.0 - sFactor;
+            finalColor = saturation * sFactor + color2 * dFactor;
+        } else {
+            finalColor = color2;
+        }
     }
 
-    return result;
+    return finalColor;
 }
 
