@@ -43,14 +43,16 @@ fragment_blur_blend(RasterizerData input [[stage_in]],
         // 上下边界进行混合?
         if ((1.0 - uv.y) < topMaxY + uniforms.lenght) {
             float sFactor = 1.0 - ((1.0 - uv.y - uniforms.top) / uniforms.lenght);
-            float dFactor = 1.0 - sFactor;
-            finalColor = saturation * sFactor + color2 * dFactor;
+            //            float dFactor = 1.0 - sFactor;
+            //            finalColor = saturation * sFactor + color2 * dFactor;
+            finalColor = mix(color2, saturation, sFactor);
         } else if (uv.y >= (topMaxY) && uv.y < (topMaxY) + uniforms.lenght) {
             float p = uv.y - topMaxY;
 
             float sFactor = 1.0 - p / uniforms.lenght;
-            float dFactor = 1.0 - sFactor;
-            finalColor = saturation * sFactor + color2 * dFactor;
+            //            float dFactor = 1.0 - sFactor;
+            //            finalColor = saturation * sFactor + color2 * dFactor;
+            finalColor = mix(color2, saturation, sFactor);
         } else {
             finalColor = color2;
         }
