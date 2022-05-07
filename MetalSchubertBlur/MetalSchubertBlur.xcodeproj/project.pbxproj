@@ -1,0 +1,417 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3C18E04B2826875800568281 /* 68AE84400B33148E508B1A6A91E96ADE.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C18E04A2826875800568281 /* 68AE84400B33148E508B1A6A91E96ADE.jpg */; };
+		3C18E04D2826877200568281 /* 10F11476E028E70EABE77C47BD13409A.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C18E04C2826877200568281 /* 10F11476E028E70EABE77C47BD13409A.jpg */; };
+		3C18E04F2826895800568281 /* 7541651897093.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3C18E04E2826895800568281 /* 7541651897093.jpg */; };
+		3CB021AA28265ED400A4E02D /* 1B9D11649D0A36576E228D8EFB8A873F.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CB021A928265ED400A4E02D /* 1B9D11649D0A36576E228D8EFB8A873F.jpg */; };
+		3CCB51F72826362F00CFC210 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCB51F62826362F00CFC210 /* AppDelegate.swift */; };
+		3CCB51F92826362F00CFC210 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCB51F82826362F00CFC210 /* SceneDelegate.swift */; };
+		3CCB51FB2826362F00CFC210 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCB51FA2826362F00CFC210 /* ViewController.swift */; };
+		3CCB51FE2826362F00CFC210 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CCB51FC2826362F00CFC210 /* Main.storyboard */; };
+		3CCB52002826363000CFC210 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CCB51FF2826363000CFC210 /* Assets.xcassets */; };
+		3CCB52032826363000CFC210 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CCB52012826363000CFC210 /* LaunchScreen.storyboard */; };
+		3CCB520B282636F000CFC210 /* BlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCB520A282636F000CFC210 /* BlurEffect.swift */; };
+		3CCB520E2826378A00CFC210 /* Shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3CCB520D2826378A00CFC210 /* Shader.metal */; };
+		3CCB5215282646E800CFC210 /* 186BFC976E61290ACD82744D62F64F0A.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CCB5214282646E800CFC210 /* 186BFC976E61290ACD82744D62F64F0A.jpg */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3C18E04A2826875800568281 /* 68AE84400B33148E508B1A6A91E96ADE.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 68AE84400B33148E508B1A6A91E96ADE.jpg; sourceTree = "<group>"; };
+		3C18E04C2826877200568281 /* 10F11476E028E70EABE77C47BD13409A.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 10F11476E028E70EABE77C47BD13409A.jpg; sourceTree = "<group>"; };
+		3C18E04E2826895800568281 /* 7541651897093.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 7541651897093.jpg; sourceTree = "<group>"; };
+		3CB021A928265ED400A4E02D /* 1B9D11649D0A36576E228D8EFB8A873F.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1B9D11649D0A36576E228D8EFB8A873F.jpg; sourceTree = "<group>"; };
+		3CCB51F32826362F00CFC210 /* MetalSchubertBlur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalSchubertBlur.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CCB51F62826362F00CFC210 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3CCB51F82826362F00CFC210 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		3CCB51FA2826362F00CFC210 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3CCB51FD2826362F00CFC210 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3CCB51FF2826363000CFC210 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3CCB52022826363000CFC210 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3CCB52042826363000CFC210 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3CCB520A282636F000CFC210 /* BlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffect.swift; sourceTree = "<group>"; };
+		3CCB520C2826373700CFC210 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
+		3CCB520D2826378A00CFC210 /* Shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader.metal; sourceTree = "<group>"; };
+		3CCB520F282640CD00CFC210 /* MetalSchubertBlur-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MetalSchubertBlur-Bridging-Header.h"; sourceTree = "<group>"; };
+		3CCB5214282646E800CFC210 /* 186BFC976E61290ACD82744D62F64F0A.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 186BFC976E61290ACD82744D62F64F0A.jpg; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3CCB51F02826362F00CFC210 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3CCB51EA2826362F00CFC210 = {
+			isa = PBXGroup;
+			children = (
+				3C18E04E2826895800568281 /* 7541651897093.jpg */,
+				3CCB51F52826362F00CFC210 /* MetalSchubertBlur */,
+				3CCB51F42826362F00CFC210 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3CCB51F42826362F00CFC210 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3CCB51F32826362F00CFC210 /* MetalSchubertBlur.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3CCB51F52826362F00CFC210 /* MetalSchubertBlur */ = {
+			isa = PBXGroup;
+			children = (
+				3CCB52132826467200CFC210 /* images */,
+				3CCB51F62826362F00CFC210 /* AppDelegate.swift */,
+				3CCB51F82826362F00CFC210 /* SceneDelegate.swift */,
+				3CCB51FA2826362F00CFC210 /* ViewController.swift */,
+				3CCB520A282636F000CFC210 /* BlurEffect.swift */,
+				3CCB520C2826373700CFC210 /* ShaderTypes.h */,
+				3CCB520D2826378A00CFC210 /* Shader.metal */,
+				3CCB520F282640CD00CFC210 /* MetalSchubertBlur-Bridging-Header.h */,
+				3CCB51FC2826362F00CFC210 /* Main.storyboard */,
+				3CCB51FF2826363000CFC210 /* Assets.xcassets */,
+				3CCB52012826363000CFC210 /* LaunchScreen.storyboard */,
+				3CCB52042826363000CFC210 /* Info.plist */,
+			);
+			path = MetalSchubertBlur;
+			sourceTree = "<group>";
+		};
+		3CCB52132826467200CFC210 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				3CB021A928265ED400A4E02D /* 1B9D11649D0A36576E228D8EFB8A873F.jpg */,
+				3CCB5214282646E800CFC210 /* 186BFC976E61290ACD82744D62F64F0A.jpg */,
+				3C18E04A2826875800568281 /* 68AE84400B33148E508B1A6A91E96ADE.jpg */,
+				3C18E04C2826877200568281 /* 10F11476E028E70EABE77C47BD13409A.jpg */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3CCB51F22826362F00CFC210 /* MetalSchubertBlur */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3CCB52072826363000CFC210 /* Build configuration list for PBXNativeTarget "MetalSchubertBlur" */;
+			buildPhases = (
+				3CCB51EF2826362F00CFC210 /* Sources */,
+				3CCB51F02826362F00CFC210 /* Frameworks */,
+				3CCB51F12826362F00CFC210 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MetalSchubertBlur;
+			productName = MetalSchubertBlur;
+			productReference = 3CCB51F32826362F00CFC210 /* MetalSchubertBlur.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3CCB51EB2826362F00CFC210 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					3CCB51F22826362F00CFC210 = {
+						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 1320;
+					};
+				};
+			};
+			buildConfigurationList = 3CCB51EE2826362F00CFC210 /* Build configuration list for PBXProject "MetalSchubertBlur" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3CCB51EA2826362F00CFC210;
+			productRefGroup = 3CCB51F42826362F00CFC210 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3CCB51F22826362F00CFC210 /* MetalSchubertBlur */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3CCB51F12826362F00CFC210 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C18E04D2826877200568281 /* 10F11476E028E70EABE77C47BD13409A.jpg in Resources */,
+				3CCB52032826363000CFC210 /* LaunchScreen.storyboard in Resources */,
+				3CCB52002826363000CFC210 /* Assets.xcassets in Resources */,
+				3CB021AA28265ED400A4E02D /* 1B9D11649D0A36576E228D8EFB8A873F.jpg in Resources */,
+				3CCB5215282646E800CFC210 /* 186BFC976E61290ACD82744D62F64F0A.jpg in Resources */,
+				3CCB51FE2826362F00CFC210 /* Main.storyboard in Resources */,
+				3C18E04B2826875800568281 /* 68AE84400B33148E508B1A6A91E96ADE.jpg in Resources */,
+				3C18E04F2826895800568281 /* 7541651897093.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3CCB51EF2826362F00CFC210 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CCB51FB2826362F00CFC210 /* ViewController.swift in Sources */,
+				3CCB520B282636F000CFC210 /* BlurEffect.swift in Sources */,
+				3CCB51F72826362F00CFC210 /* AppDelegate.swift in Sources */,
+				3CCB520E2826378A00CFC210 /* Shader.metal in Sources */,
+				3CCB51F92826362F00CFC210 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3CCB51FC2826362F00CFC210 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3CCB51FD2826362F00CFC210 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		3CCB52012826363000CFC210 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3CCB52022826363000CFC210 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3CCB52052826363000CFC210 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3CCB52062826363000CFC210 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3CCB52082826363000CFC210 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 492U995837;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MetalSchubertBlur/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.taihe.MetalSchubertBlur;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.taihe.*";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MetalSchubertBlur/MetalSchubertBlur-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3CCB52092826363000CFC210 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 492U995837;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MetalSchubertBlur/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.taihe.MetalSchubertBlur;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.taihe.*";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MetalSchubertBlur/MetalSchubertBlur-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3CCB51EE2826362F00CFC210 /* Build configuration list for PBXProject "MetalSchubertBlur" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3CCB52052826363000CFC210 /* Debug */,
+				3CCB52062826363000CFC210 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3CCB52072826363000CFC210 /* Build configuration list for PBXNativeTarget "MetalSchubertBlur" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3CCB52082826363000CFC210 /* Debug */,
+				3CCB52092826363000CFC210 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3CCB51EB2826362F00CFC210 /* Project object */;
+}
