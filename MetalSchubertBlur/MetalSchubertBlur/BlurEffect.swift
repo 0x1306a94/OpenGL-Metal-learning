@@ -104,7 +104,8 @@ extension BlurEffect {
         let outputTexture: MTLTexture
         
         do {
-            sourceTexture = try textureLoader.newTexture(data: sourceImage, options: [.SRGB: false, .origin: true])
+            let origin = MTKTextureLoader.Origin.flippedVertically
+            sourceTexture = try textureLoader.newTexture(data: sourceImage, options: [.SRGB: false, .origin: origin])
             let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm, width: size.0, height: size.1, mipmapped: false)
             desc.storageMode = .shared
             desc.usage = [.shaderWrite, .shaderRead, .renderTarget]
