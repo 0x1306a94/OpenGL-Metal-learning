@@ -172,7 +172,7 @@ extension BlurEffect {
             commandEncoder.setViewport(MTLViewport(originX: 0, originY: 0, width: Double(size.0), height: Double(size.1), znear: -1, zfar: 1))
              
             let dominantColor = simd_float3(x: 0.443062, y: 0.274907, z: 0.286831)
-            var uniform = KKUniform(top: 0.3, bottom: 0.3, lenght: 0.15, saturation: 1.5, dominantColor: dominantColor)
+            var uniform = KKUniform(top: 0.3, bottom: 0.3, lenght: 0.08, saturation: 1.5, dominantColor: dominantColor)
             
             commandEncoder.setVertexBuffer(self.vertexBuffer, offset: 0, index: Int(KKVertexInputIndexVertexs.rawValue))
             commandEncoder.setFragmentTexture(blurTexture, index: Int(KKFragmentTextureIndexOne.rawValue))
