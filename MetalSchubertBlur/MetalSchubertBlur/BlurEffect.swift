@@ -88,7 +88,7 @@ final class BlurEffect {
             KKVertex(position: vector_float2(x: 1, y: 1), textureCoordinate: vector_float2(1, 0)),
         ]
         
-        guard let buffer = device.makeBuffer(bytes: vertexs, length: MemoryLayout<KKVertex>.size * 4, options: .storageModeShared) else {
+        guard let buffer = device.makeBuffer(bytes: vertexs, length: MemoryLayout<KKVertex>.stride * 4, options: .storageModeShared) else {
             throw BlurEffectError.bufferFail
         }
         
@@ -178,7 +178,7 @@ extension BlurEffect {
             commandEncoder.setVertexBuffer(self.vertexBuffer, offset: 0, index: Int(KKVertexInputIndexVertexs.rawValue))
             commandEncoder.setFragmentTexture(blurTexture, index: Int(KKFragmentTextureIndexOne.rawValue))
             commandEncoder.setFragmentTexture(sourceTexture, index: Int(KKFragmentTextureIndexTow.rawValue))
-            commandEncoder.setFragmentBytes(&uniform, length: MemoryLayout<KKUniform>.size, index: Int(KKVertexInputIndexUniforms.rawValue))
+            commandEncoder.setFragmentBytes(&uniform, length: MemoryLayout<KKUniform>.stride, index: Int(KKVertexInputIndexUniforms.rawValue))
             commandEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
             commandEncoder.endEncoding()
         }
