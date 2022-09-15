@@ -19,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3CCAE8C528D33EC000FE187A /* SSShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSShaderTypes.h; sourceTree = "<group>"; };
 		3CE58BC4253D822F00812D8E /* MetalSample-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MetalSample-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CE58BC7253D822F00812D8E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3CE58BC8253D822F00812D8E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -33,7 +34,6 @@
 		3CE58BD9253D823000812D8E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3CE58BE4253D833100812D8E /* SSMetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSMetalRenderer.h; sourceTree = "<group>"; };
 		3CE58BE5253D833100812D8E /* SSMetalRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SSMetalRenderer.m; sourceTree = "<group>"; };
-		3CE58BE8253D83EB00812D8E /* SSShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSShaderTypes.h; sourceTree = "<group>"; };
 		3CE58BE9253D83F800812D8E /* SSUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSUtil.h; sourceTree = "<group>"; };
 		3CE58BEA253D845A00812D8E /* Shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,7 +74,7 @@
 				3CE58BCB253D822F00812D8E /* SceneDelegate.m */,
 				3CE58BCD253D822F00812D8E /* ViewController.h */,
 				3CE58BCE253D822F00812D8E /* ViewController.m */,
-				3CE58BE8253D83EB00812D8E /* SSShaderTypes.h */,
+				3CCAE8C528D33EC000FE187A /* SSShaderTypes.h */,
 				3CE58BEA253D845A00812D8E /* Shader.metal */,
 				3CE58BE9253D83F800812D8E /* SSUtil.h */,
 				3CE58BE4253D833100812D8E /* SSMetalRenderer.h */,
