@@ -14,6 +14,12 @@
 #import <SceneKit/ModelIO.h>
 #import <SceneKit/SceneKit.h>
 
+typedef struct {
+    SCNMatrix4 transform;
+    SCNVector3 position;
+    CGFloat cameraFieldOfView;
+} ObjInitialParameters;
+
 @interface ViewController ()
 @property (nonatomic, strong) SCNView *sceneView;
 @property (nonatomic, strong) UIButton *resetButton;
@@ -25,7 +31,8 @@
 @property (nonatomic, strong) KKRenderder *renderder;
 @property (nonatomic, strong) CADisplayLink *displayLink;
 @property (nonatomic, assign) CGFloat rotation;
-@property (nonatomic, assign) SCNMatrix4 initTransform;
+@property (nonatomic, assign) SCNMatrix4 fixTransform;
+@property (nonatomic, assign) ObjInitialParameters initParameters;
 @end
 
 @implementation ViewController
@@ -156,20 +163,17 @@
     self.sceneView.scene = scene;
 
     SCNNode *rootNode = scene.rootNode;
-    self.initTransform = SCNMatrix4MakeRotation(M_PI_2, 0, -1, 0);
-//    self.initTransform = SCNMatrix4Identity;
-    rootNode.childNodes.firstObject.transform = self.initTransform;
+    self.fixTransform = SCNMatrix4MakeRotation(M_PI_2, 0, -1, 0);
+    //    self.fixTransform = SCNMatrix4Identity;
+    rootNode.childNodes.firstObject.transform = self.fixTransform;
     SCNCameraController *cameraController = self.sceneView.defaultCameraController;
     [cameraController frameNodes:@[rootNode]];
-    //    SCNNode *rootNode = scene.rootNode;
-    //    rootNode.rotation = SCNVector4Make(0, 1.0, 0, GLKMathDegreesToRadians(60));
-    //    rootNode.transform = SCNMatrix4MakeTranslation(0.5, 0, 0);
-    //    cameraNode.rotation = SCNVector4Make(0, 1, 0, M_PI_2);
-    //    CGPoint onScreenPoint = CGPointMake(CGRectGetWidth(self.sceneView.frame) * 0.5, CGRectGetHeight(self.sceneView.frame) * 0.5);
-    //    CGSize viewport = self.sceneView.frame.size;
-    //    [cameraController dollyBy:0.5 onScreenPoint:onScreenPoint viewport:viewport];
-    //    [cameraController rollBy:90 aroundScreenPoint:onScreenPoint viewport:viewport];
-    //    [cameraController dollyToTarget:0.5];
+
+    self.initParameters = (ObjInitialParameters){
+        .transform = self.sceneView.pointOfView.transform,
+        .position = self.sceneView.pointOfView.position,
+        .cameraFieldOfView = self.sceneView.pointOfView.camera.fieldOfView,
+    };
 
     self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update)];
     [self.displayLink addToRunLoop:NSRunLoop.mainRunLoop forMode:NSDefaultRunLoopMode];
@@ -178,12 +182,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
-    //    SCNCameraController *cameraController = self.sceneView.defaultCameraController;
-    //    CGPoint onScreenPoint = CGPointMake(CGRectGetWidth(self.sceneView.frame) * 0.5, CGRectGetHeight(self.sceneView.frame) * 0.5);
-    //    CGSize viewport = self.sceneView.frame.size;
-    //    [cameraController rollBy:90 aroundScreenPoint:onScreenPoint viewport:viewport];
-    //    [cameraController dollyToTarget:10];
 }
 
 - (void)startButtonAction:(UIButton *)sender {
@@ -195,7 +193,11 @@
     self.rotation = 0;
     //    SCNNode *rootNode = self.sceneView.scene.rootNode.childNodes.firstObject;
     //    rootNode.transform = SCNMatrix4Identity;
-
+#if 1
+    self.sceneView.pointOfView.transform = self.initParameters.transform;
+    self.sceneView.pointOfView.position = self.initParameters.position;
+    self.sceneView.pointOfView.camera.fieldOfView = self.initParameters.cameraFieldOfView;
+#else
     /* 私有API
      * allowsCameraControl = YES 后,双击手势会被启用
      * 在双击手势中会调用 SCNView 的 switchToNextCamera
@@ -204,6 +206,7 @@
     NSLog(@"switch begin camera: %@", cameraController.pointOfView.camera);
     [self.sceneView performSelector:@selector(switchToNextCamera)];
     NSLog(@"switch end camera: %@", cameraController.pointOfView.camera);
+#endif
 }
 
 - (void)update {
@@ -211,19 +214,8 @@
     self.rotation += 0.2;
 
     SCNNode *rootNode = self.sceneView.scene.rootNode.childNodes.firstObject;
-    rootNode.transform = SCNMatrix4Rotate(self.initTransform, GLKMathDegreesToRadians(self.rotation), 0, 1.0, 0);
+    rootNode.transform = SCNMatrix4Rotate(self.fixTransform, GLKMathDegreesToRadians(self.rotation), 0, 1.0, 0);
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-
-    //    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
-    //
-    //    } completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
-    //        SCNNode *rootNode = self.sceneView.scene.rootNode;
-    //        SCNCameraController *cameraController = self.sceneView.defaultCameraController;
-    //        [cameraController frameNodes:@[rootNode]];
-    //    }];
-}
 @end
 
