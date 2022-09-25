@@ -7,20 +7,22 @@
 
 #import "ViewController.h"
 
+#import "Frustum.h"
 #import "KKRenderder.h"
 
 #import <GLKit/GLKit.h>
 #import <MetalKit/MetalKit.h>
 #import <SceneKit/ModelIO.h>
 #import <SceneKit/SceneKit.h>
-
+#import <objc/message.h>
+#import <simd/simd.h>
 typedef struct {
     SCNMatrix4 transform;
     SCNVector3 position;
     CGFloat cameraFieldOfView;
 } ObjInitialParameters;
 
-@interface ViewController ()
+@interface ViewController () <MDLAssetResolver>
 @property (nonatomic, strong) SCNView *sceneView;
 @property (nonatomic, strong) UIButton *resetButton;
 @property (nonatomic, strong) UIButton *startButton;
@@ -104,10 +106,10 @@ typedef struct {
     //    SCNScene *scene = [SCNScene sceneNamed:@"untitled.dae"];
     NSString *objName = @"finger.obj";
     objName = @"untitled.obj";
-    objName = @"cup.obj";
-    objName = @"ht.obj";
+    //        objName = @"cup.obj";
+//    objName = @"ht.obj";
     NSString *textureImageName = @"IMG_3289.JPG";
-    textureImageName = @"ht.png";
+    //    textureImageName = @"ht.png";
     NSURL *url = [[NSBundle mainBundle] URLForResource:objName withExtension:nil];
     MDLAsset *asset = [[MDLAsset alloc] initWithURL:url];
 
@@ -123,11 +125,38 @@ typedef struct {
     //    [baseColour setColor:UIColor.orangeColor.CGColor];
     [material setProperty:baseColour];
 
+    vector_float3 minBounds = simd_make_float3(9999999);
+    vector_float3 maxBounds = simd_make_float3(-9999999);
     for (MDLMesh *mesh in asset) {
+        MDLAxisAlignedBoundingBox boundingBox = mesh.boundingBox;
+        minBounds = simd_min(minBounds, boundingBox.minBounds);
+        maxBounds = simd_max(maxBounds, boundingBox.maxBounds);
         for (MDLSubmesh *submesh in mesh.submeshes) {
             submesh.material = material;
+//            for (MDLMaterialProperty *property in submesh.material) {
+//                NSLog(@"%@", property.name);
+//                if (property.semantic == MDLMaterialSemanticBaseColor) {
+//                    NSLog(@"url: %@", property.URLValue);
+//                }
+//            }
         }
     }
+
+    vector_float3 aabbCenter = (maxBounds + minBounds) * 0.5;
+    NSLog(@"minBounds: %f %f %f", minBounds.x, minBounds.y, minBounds.z);
+    NSLog(@"maxBounds: %f %f %f", maxBounds.x, maxBounds.y, maxBounds.z);
+    NSLog(@"aabbCenter: %f %f %f", aabbCenter.x, aabbCenter.y, aabbCenter.z);
+
+    vector_float3 diff = maxBounds - minBounds;
+    float max = diff.x;
+    if (diff.y > max) {
+        max = diff.y;
+    }
+    if (diff.z > max) {
+        max = diff.z;
+    }
+
+    float scale = 0.5 / max;
 
     SCNScene *scene = [SCNScene sceneWithMDLAsset:asset];
     //    SCNScene *scene = [SCNScene sceneNamed:@"untitled.obj"];
@@ -137,11 +166,30 @@ typedef struct {
     self.camera = camera;
     camera.automaticallyAdjustsZRange = YES;
     NSLog(@"camera: %@", camera);
-    camera.zNear = 1;
+    camera.zNear = 0.1;
     camera.zFar = 100;
+    camera.fieldOfView = 60;
     cameraNode.camera = camera;
     cameraNode.position = SCNVector3Make(0, 0, 0);
+    cameraNode.constraints = @[[SCNLookAtConstraint lookAtConstraintWithTarget:scene.rootNode]];
     [scene.rootNode addChildNode:cameraNode];
+
+    do {
+        Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
+        camera.Zoom = 60;
+        float aspect = CGRectGetWidth(self.sceneView.frame) / CGRectGetHeight(self.sceneView.frame);
+        const struct Frustum frustum = createFrustumFromCamera(camera,
+                                                               aspect,
+                                                               glm::radians(camera.Zoom),
+                                                               0.1,
+                                                               100);
+
+        float distance = frustum.nearFace.getSignedDistanceToPlan(glm::vec3(aabbCenter.x, aabbCenter.y, aabbCenter.z));
+
+        //        scene.rootNode.childNodes.firstObject.transform = SCNMatrix4MakeScale(distance,distance,distance);
+        //                cameraNode.transform = SCNMatrix4MakeTranslation(0, 0, distance);
+        NSLog(@"distance: %f", distance);
+    } while (0);
 
     SCNNode *lightNode = [SCNNode new];
     lightNode.light = [SCNLight new];
@@ -163,10 +211,16 @@ typedef struct {
     self.sceneView.scene = scene;
 
     SCNNode *rootNode = scene.rootNode;
-    self.fixTransform = SCNMatrix4MakeRotation(M_PI_2, 0, -1, 0);
-    //    self.fixTransform = SCNMatrix4Identity;
+    SCNMatrix4 scaleMatrix = SCNMatrix4MakeScale(scale, scale, scale);
+    SCNMatrix4 transMatrix = SCNMatrix4MakeTranslation(-aabbCenter.x, -aabbCenter.y, -aabbCenter.z);
+    self.fixTransform = SCNMatrix4Mult(scaleMatrix, transMatrix);
+    //    self.fixTransform = SCNMatrix4MakeRotation(M_PI_2, 0, -1, 0);
+    self.fixTransform = SCNMatrix4Identity;
     rootNode.childNodes.firstObject.transform = self.fixTransform;
     SCNCameraController *cameraController = self.sceneView.defaultCameraController;
+    Method m = class_getInstanceMethod(cameraController.class, @selector(frameNodes:));
+    IMP imp = method_getImplementation(m);
+    NSLog(@"%p", imp);
     [cameraController frameNodes:@[rootNode]];
 
     self.initParameters = (ObjInitialParameters){
@@ -215,6 +269,16 @@ typedef struct {
 
     SCNNode *rootNode = self.sceneView.scene.rootNode.childNodes.firstObject;
     rootNode.transform = SCNMatrix4Rotate(self.fixTransform, GLKMathDegreesToRadians(self.rotation), 0, 1.0, 0);
+}
+
+#pragma mark - MDLAssetResolver
+- (BOOL)canResolveAssetNamed:(NSString *)name {
+    return YES;
+}
+
+- (NSURL *)resolveAssetNamed:(NSString *)name {
+    NSURL *url = [[NSBundle mainBundle] URLForResource:name withExtension:nil];
+    return url;
 }
 
 @end

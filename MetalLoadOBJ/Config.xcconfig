@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  MetalLoadOBJ
+//
+//  Created by king on 2022/9/23.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+HEADER_SEARCH_PATHS=$(inherited) $(SRCROOT)/GLM
